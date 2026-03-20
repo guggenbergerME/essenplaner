@@ -1,14 +1,14 @@
 /* ══════════════════════════════════════════════════
    essenplaner – Stylesheet
-   Stil: modern | Primaerfarbe: #1565C0
+   Stil: modern | Primaerfarbe: #0A2463
    Tag/Nacht-Modus via data-theme
    ══════════════════════════════════════════════════ */
 
 /* ── Light Theme (Standard) ─────────────────────── */
 :root, [data-theme="light"] {
-    --brand-color: #1565C0;
-    --brand-dark: #0D47A1;
-    --brand-light: #BBDEFB;
+    --brand-color: #0A2463;
+    --brand-dark: #061539;
+    --brand-light: #D6E4F0;
     --bg: #f5f7fa;
     --bg-card: #ffffff;
     --text: #1a1a2e;

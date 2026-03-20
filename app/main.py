@@ -9,6 +9,7 @@ from fastapi.responses import HTMLResponse, Response
 
 from app.planner import generiere_wochenplan, lade_alle_rezepte, parse_nichtverwenden, filter_rezepte
 from app.pdf_generator import einkaufsliste_pdf, rezept_pdf
+from app.settings import lade_einstellungen, speichere_einstellungen, TAGE_KURZ, TAGE_LANG
 
 # ── App ──────────────────────────────────────────────
 app = FastAPI(
@@ -122,6 +123,43 @@ async def rezept_pdf_download(dateiname: str):
         media_type="application/pdf",
         headers={"Content-Disposition": f"attachment; filename={safe_name}.pdf"},
     )
+
+
+# ── Einstellungen ────────────────────────────────
+@app.get("/einstellungen", response_class=HTMLResponse)
+async def einstellungen_seite(request: Request):
+    settings = lade_einstellungen()
+    return templates.TemplateResponse("einstellungen.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "settings": settings,
+        "tage_kurz": TAGE_KURZ,
+        "tage_lang": TAGE_LANG,
+    })
+
+
+@app.post("/einstellungen", response_class=HTMLResponse)
+async def einstellungen_speichern(request: Request):
+    form = await request.form()
+    settings = lade_einstellungen()
+
+    settings["starttag"] = form.get("starttag", "Mo")
+    for tag in TAGE_KURZ:
+        settings["arbeitszeiten"][tag] = form.get(f"zeit_{tag}", "").strip()
+
+    speichere_einstellungen(settings)
+
+    # Plan neu generieren
+    _get_plan(neu=True)
+
+    return templates.TemplateResponse("einstellungen.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "settings": settings,
+        "tage_kurz": TAGE_KURZ,
+        "tage_lang": TAGE_LANG,
+        "gespeichert": True,
+    })
 
 
 @app.get("/health")

@@ -5,52 +5,10 @@ import re
 import random
 from pathlib import Path
 
+from app.settings import get_kochzeiten, get_tage_reihenfolge, TAGE_KURZ, TAGE_LANG
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
-
-TAGE_KURZ = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
-TAGE_LANG = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"]
-
-# Arbeitszeiten -> verfuegbare Kochzeit abends
-# Mo (7-18) = erst ab 18 Uhr -> max 25 min
-# Di (7-13) = ab 13 Uhr frei -> max 45 min
-# Mi (7-16) = ab 16 Uhr -> max 35 min
-# Do (7-19) = erst ab 19 Uhr -> max 25 min
-# Fr (7-16) = ab 16 Uhr -> max 35 min
-# Sa = ganzer Tag frei -> max 90 min
-# So = ganzer Tag frei -> max 90 min
-DEFAULT_MAX_ZEIT = {
-    "Mo": 25, "Di": 45, "Mi": 35, "Do": 25, "Fr": 35, "Sa": 90, "So": 90
-}
-
-
-def parse_zeit_datei():
-    """Liest wochenplan_zeit.md und berechnet max Kochzeit pro Tag."""
-    zeitdatei = DATA_DIR / "wochenplan_zeit.md"
-    max_zeit = dict(DEFAULT_MAX_ZEIT)
-
-    if not zeitdatei.exists():
-        return max_zeit
-
-    for line in zeitdatei.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        for tag in TAGE_KURZ:
-            if line.startswith(tag):
-                match = re.search(r"\((\d+)-(\d+)\)", line)
-                if match:
-                    start, end = int(match.group(1)), int(match.group(2))
-                    feierabend = end
-                    if feierabend >= 18:
-                        max_zeit[tag] = 25
-                    elif feierabend >= 16:
-                        max_zeit[tag] = 35
-                    elif feierabend >= 13:
-                        max_zeit[tag] = 45
-                    else:
-                        max_zeit[tag] = 60
-                else:
-                    max_zeit[tag] = 90
-    return max_zeit
 
 
 def parse_nichtverwenden():
@@ -92,13 +50,11 @@ def parse_rezept(filepath):
         "datei": filepath.name,
     }
 
-    # Name aus erster Ueberschrift
     for line in lines:
         if line.startswith("# "):
             rezept["name"] = line[2:].strip()
             break
 
-    # Metadaten
     for line in lines:
         line = line.strip()
         if line.startswith("- zubereitungszeit:"):
@@ -114,7 +70,6 @@ def parse_rezept(filepath):
         elif line.startswith("- tags:"):
             rezept["tags"] = [t.strip() for t in line.split(":")[1].split(",")]
 
-    # Zutaten (Bereich zwischen ## Zutaten und naechste ##)
     in_zutaten = False
     in_zubereitung = False
     for line in lines:
@@ -163,20 +118,21 @@ def filter_rezepte(rezepte, ausschluss):
 
 def generiere_wochenplan():
     """Generiert einen Wochenplan mit passenden Rezepten pro Tag."""
-    max_zeit = parse_zeit_datei()
+    max_zeit = get_kochzeiten()
     ausschluss = parse_nichtverwenden()
     laeden = parse_laden()
     alle_rezepte = lade_alle_rezepte()
     rezepte = filter_rezepte(alle_rezepte, ausschluss)
 
+    tage_kurz, tage_lang = get_tage_reihenfolge()
+
     plan = []
     verwendete = set()
 
-    for i, tag_kurz in enumerate(TAGE_KURZ):
-        tag_lang = TAGE_LANG[i]
+    for i, tag_kurz in enumerate(tage_kurz):
+        tag_lang = tage_lang[i]
         max_min = max_zeit[tag_kurz]
 
-        # Passende Rezepte finden (Tag-Match + Zeitlimit)
         passend = [
             r for r in rezepte
             if r["zubereitungszeit"] <= max_min
@@ -184,7 +140,6 @@ def generiere_wochenplan():
             and r["name"] not in verwendete
         ]
 
-        # Fallback: nur nach Zeit filtern
         if not passend:
             passend = [
                 r for r in rezepte
@@ -192,7 +147,6 @@ def generiere_wochenplan():
                 and r["name"] not in verwendete
             ]
 
-        # Noch ein Fallback: irgendein unbenutztes Rezept
         if not passend:
             passend = [r for r in rezepte if r["name"] not in verwendete]
 
@@ -209,7 +163,6 @@ def generiere_wochenplan():
             "rezept": rezept,
         })
 
-    # Einkaufsliste zusammenstellen
     einkaufsliste = {}
     for eintrag in plan:
         if eintrag["rezept"]:
@@ -218,7 +171,6 @@ def generiere_wochenplan():
                     einkaufsliste[zutat] = []
                 einkaufsliste[zutat].append(eintrag["tag"])
 
-    # Sortierte Einkaufsliste
     einkaufsliste_sortiert = sorted(einkaufsliste.items(), key=lambda x: x[0].lower())
 
     return {

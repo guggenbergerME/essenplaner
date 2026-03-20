@@ -97,6 +97,22 @@ body {
     gap: 1.5rem;
 }
 
+.header__nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color var(--transition);
+}
+
+.header__nav a:hover {
+    color: var(--brand-color);
+}
+
+.header__nav-active {
+    color: var(--brand-color) !important;
+}
+
 /* ── Theme Toggle ───────────────────────────────── */
 .theme-toggle {
     width: 40px;
@@ -632,6 +648,132 @@ body {
 
 .bug-modal__submit:hover {
     background: #d32f2f;
+}
+
+/* ── Einstellungen ──────────────────────────────── */
+.settings {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.settings__title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.settings__alert {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .settings__alert {
+    background: #1a3a2a;
+    color: #7dd3a0;
+    border-color: #2d5a3d;
+}
+
+.settings__form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.settings__section {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.settings__section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.settings__section-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.settings__starttag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.settings__radio {
+    cursor: pointer;
+}
+
+.settings__radio input {
+    display: none;
+}
+
+.settings__radio-label {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all var(--transition);
+}
+
+.settings__radio input:checked + .settings__radio-label {
+    background: var(--brand-color);
+    color: white;
+    border-color: var(--brand-color);
+}
+
+.settings__radio-label:hover {
+    border-color: var(--brand-color);
+}
+
+.settings__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.settings__day {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.settings__day-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.settings__day-input {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color var(--transition);
+}
+
+.settings__day-input:focus {
+    outline: none;
+    border-color: var(--brand-color);
+    box-shadow: 0 0 0 3px var(--brand-light);
+}
+
+.settings__day-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
 }
 
 /* ── Rezept-Detailseite ─────────────────────────── */

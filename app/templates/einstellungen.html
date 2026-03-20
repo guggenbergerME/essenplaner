@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Einstellungen – essenplaner{% endblock %}
+
+{% block nav %}
+<a href="/">Wochenplan</a>
+<a href="/einstellungen" class="header__nav-active">Einstellungen</a>
+{% endblock %}
+
+{% block content %}
+<section class="settings">
+    <h1 class="settings__title">Einstellungen</h1>
+
+    {% if gespeichert %}
+    <div class="settings__alert">Einstellungen gespeichert! Der Wochenplan wurde neu generiert.</div>
+    {% endif %}
+
+    <form method="POST" action="/einstellungen" class="settings__form">
+
+        <!-- Starttag -->
+        <div class="settings__section">
+            <h2 class="settings__section-title">Starttag der Woche</h2>
+            <p class="settings__section-desc">Mit welchem Tag soll der Wochenplan beginnen?</p>
+            <div class="settings__starttag">
+                {% for i in range(tage_kurz | length) %}
+                <label class="settings__radio">
+                    <input type="radio" name="starttag" value="{{ tage_kurz[i] }}" {% if settings.starttag == tage_kurz[i] %}checked{% endif %}>
+                    <span class="settings__radio-label">{{ tage_lang[i] }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Arbeitszeiten -->
+        <div class="settings__section">
+            <h2 class="settings__section-title">Arbeitszeiten</h2>
+            <p class="settings__section-desc">Trage die Arbeitszeiten pro Tag ein (z.B. <strong>7-18</strong>). Leer lassen = freier Tag (viel Kochzeit).</p>
+
+            <div class="settings__grid">
+                {% for i in range(tage_kurz | length) %}
+                <div class="settings__day">
+                    <label class="settings__day-label" for="zeit_{{ tage_kurz[i] }}">{{ tage_lang[i] }}</label>
+                    <input
+                        type="text"
+                        id="zeit_{{ tage_kurz[i] }}"
+                        name="zeit_{{ tage_kurz[i] }}"
+                        value="{{ settings.arbeitszeiten[tage_kurz[i]] }}"
+                        placeholder="z.B. 7-18"
+                        class="settings__day-input"
+                    >
+                    <span class="settings__day-hint">
+                        {% set az = settings.arbeitszeiten[tage_kurz[i]] %}
+                        {% if az %}
+                            {% set parts = az.split('-') %}
+                            {% if parts | length == 2 %}
+                                {% set end = parts[1] | int %}
+                                {% if end >= 18 %}max. 25 Min.
+                                {% elif end >= 16 %}max. 35 Min.
+                                {% elif end >= 13 %}max. 45 Min.
+                                {% else %}max. 60 Min.
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            Frei – max. 90 Min.
+                        {% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary">Speichern</button>
+    </form>
+</section>
+{% endblock %}

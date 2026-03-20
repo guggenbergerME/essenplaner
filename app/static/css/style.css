@@ -340,6 +340,37 @@ body {
     line-height: 1.5;
 }
 
+.weekplan__detail-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.weekplan__detail-link {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--brand-color);
+    text-decoration: none;
+}
+
+.weekplan__detail-link:hover {
+    text-decoration: underline;
+}
+
+.weekplan__meal-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--brand-color);
+    line-height: 1.3;
+    text-decoration: none;
+}
+
+.weekplan__meal-name:hover {
+    text-decoration: underline;
+}
+
 /* ── Einkaufsliste ──────────────────────────────── */
 .shopping {
     margin-top: 3rem;
@@ -350,10 +381,21 @@ body {
     transition: background 0.3s ease;
 }
 
+.shopping__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
 .shopping__title {
     font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+}
+
+.btn--small {
+    padding: 0.45rem 1.2rem;
+    font-size: 0.8rem;
 }
 
 .shopping__stores {
@@ -592,6 +634,108 @@ body {
     background: #d32f2f;
 }
 
+/* ── Rezept-Detailseite ─────────────────────────── */
+.rezept-detail {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.rezept-detail__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.rezept-detail__back {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color var(--transition);
+}
+
+.rezept-detail__back:hover {
+    color: var(--brand-color);
+}
+
+.rezept-detail__title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.rezept-detail__meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.rezept-detail__tag {
+    background: var(--bg);
+    color: var(--text-muted);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+}
+
+.rezept-detail__tag--day {
+    background: var(--brand-light);
+    color: var(--brand-color);
+    border-color: var(--brand-color);
+}
+
+.rezept-detail__columns {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+}
+
+.rezept-detail__zutaten,
+.rezept-detail__zubereitung {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.rezept-detail__zutaten h2,
+.rezept-detail__zubereitung h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--brand-color);
+}
+
+.rezept-detail__zutaten ul {
+    list-style: none;
+    padding: 0;
+}
+
+.rezept-detail__zutaten li {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+
+.rezept-detail__zutaten li:last-child {
+    border-bottom: none;
+}
+
+.rezept-detail__zubereitung ol {
+    padding-left: 1.5rem;
+}
+
+.rezept-detail__zubereitung li {
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
 /* ── Responsive ─────────────────────────────────── */
 @media (max-width: 1100px) {
     .weekplan__grid {
@@ -605,6 +749,10 @@ body {
     }
 
     .shopping__list {
+        grid-template-columns: 1fr;
+    }
+
+    .rezept-detail__columns {
         grid-template-columns: 1fr;
     }
 }

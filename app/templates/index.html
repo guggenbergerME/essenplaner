@@ -22,8 +22,8 @@
                 {% if eintrag.rezept %}
                 <div class="weekplan__meal weekplan__meal--filled">
                     <div class="weekplan__meal-info">
-                        <span class="weekplan__meal-name">{{ eintrag.rezept.name }}</span>
-                        <span class="weekplan__meal-meta">{{ eintrag.rezept.zubereitungszeit }} Min. | {{ eintrag.rezept.portionen }} Portionen</span>
+                        <a href="/rezept/{{ eintrag.rezept.datei }}" class="weekplan__meal-name" target="_blank">{{ eintrag.rezept.name }}</a>
+                        <span class="weekplan__meal-meta">{{ eintrag.rezept.zubereitungszeit }} Min. | {{ eintrag.rezept.portionen }} Port.</span>
                     </div>
                     <button class="weekplan__detail-btn" onclick="toggleDetail('detail-{{ loop.index }}')" title="Details anzeigen">&#9660;</button>
                 </div>
@@ -40,6 +40,10 @@
                         <li>{{ schritt }}</li>
                         {% endfor %}
                     </ol>
+                    <div class="weekplan__detail-actions">
+                        <a href="/rezept/{{ eintrag.rezept.datei }}" class="weekplan__detail-link" target="_blank">Rezept oeffnen</a>
+                        <a href="/api/rezept/{{ eintrag.rezept.datei }}/pdf" class="weekplan__detail-link" target="_blank">PDF</a>
+                    </div>
                 </div>
                 {% else %}
                 <div class="weekplan__meal weekplan__meal--empty">
@@ -54,7 +58,10 @@
 
 <!-- Einkaufsliste -->
 <section class="shopping">
-    <h2 class="shopping__title">Einkaufsliste</h2>
+    <div class="shopping__header">
+        <h2 class="shopping__title">Einkaufsliste</h2>
+        <a href="/api/einkaufsliste.pdf" class="btn btn--primary btn--small" target="_blank">PDF herunterladen</a>
+    </div>
     {% if laeden %}
     <p class="shopping__stores">Geschaefte: {% for laden in laeden %}<span class="shopping__store-tag">{{ laden }}</span>{% endfor %}</p>
     {% endif %}

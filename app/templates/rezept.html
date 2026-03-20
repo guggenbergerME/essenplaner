@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ rezept.name }} – essenplaner{% endblock %}
+
+{% block content %}
+<section class="rezept-detail">
+    <div class="rezept-detail__header">
+        <a href="/" class="rezept-detail__back">&larr; Zurueck zum Wochenplan</a>
+        <a href="/api/rezept/{{ rezept.datei }}/pdf" class="btn btn--primary btn--small" target="_blank">PDF herunterladen</a>
+    </div>
+
+    <h1 class="rezept-detail__title">{{ rezept.name }}</h1>
+
+    <div class="rezept-detail__meta">
+        <span class="rezept-detail__tag">{{ rezept.zubereitungszeit }} Min.</span>
+        <span class="rezept-detail__tag">{{ rezept.portionen }} Portionen</span>
+        {% for tag in rezept.tags %}
+        <span class="rezept-detail__tag rezept-detail__tag--day">{{ tag }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="rezept-detail__columns">
+        <div class="rezept-detail__zutaten">
+            <h2>Zutaten</h2>
+            <ul>
+                {% for zutat in rezept.zutaten %}
+                <li>{{ zutat }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="rezept-detail__zubereitung">
+            <h2>Zubereitung</h2>
+            <ol>
+                {% for schritt in rezept.zubereitung %}
+                <li>{{ schritt }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</section>
+{% endblock %}

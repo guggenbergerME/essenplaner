@@ -1,9 +1,11 @@
 /* ══════════════════════════════════════════════════
    essenplaner – Stylesheet
-   Stil: modern | Primärfarbe: #2196F3
+   Stil: modern | Primaerfarbe: #2196F3
+   Tag/Nacht-Modus via data-theme
    ══════════════════════════════════════════════════ */
 
-:root {
+/* ── Light Theme (Standard) ─────────────────────── */
+:root, [data-theme="light"] {
     --brand-color: #2196F3;
     --brand-dark: #1565C0;
     --brand-light: #BBDEFB;
@@ -12,10 +14,30 @@
     --text: #1a1a2e;
     --text-muted: #6b7280;
     --border: #e5e7eb;
-    --radius: 12px;
+    --header-bg: rgba(255, 255, 255, 0.95);
+    --footer-bg: #1a1a2e;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --check-bg: #e5e7eb;
+    --radius: 12px;
     --transition: 0.2s ease;
+}
+
+/* ── Dark Theme ─────────────────────────────────── */
+[data-theme="dark"] {
+    --brand-color: #64B5F6;
+    --brand-dark: #90CAF9;
+    --brand-light: #1a3a5c;
+    --bg: #0f1117;
+    --bg-card: #1a1d27;
+    --text: #e4e6eb;
+    --text-muted: #8b8fa3;
+    --border: #2d3040;
+    --header-bg: rgba(15, 17, 23, 0.95);
+    --footer-bg: #0a0c10;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --check-bg: #2d3040;
 }
 
 /* ── Reset ──────────────────────────────────────── */
@@ -33,6 +55,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -44,14 +67,14 @@ body {
 
 /* ── Header ─────────────────────────────────────── */
 .header {
-    background: var(--bg-card);
+    background: var(--header-bg);
     border-bottom: 1px solid var(--border);
     padding: 1rem 0;
     position: sticky;
     top: 0;
     z-index: 100;
     backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.95);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .header .container {
@@ -70,18 +93,63 @@ body {
 
 .header__nav {
     display: flex;
+    align-items: center;
     gap: 1.5rem;
 }
 
-.header__nav a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color var(--transition);
+/* ── Theme Toggle ───────────────────────────────── */
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg-card);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
 }
 
-.header__nav a:hover {
-    color: var(--brand-color);
+.theme-toggle:hover {
+    border-color: var(--brand-color);
+    transform: scale(1.1);
+}
+
+.theme-toggle__icon {
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.theme-toggle__icon--light {
+    color: #f59e0b;
+}
+
+.theme-toggle__icon--dark {
+    color: #64B5F6;
+}
+
+[data-theme="light"] .theme-toggle__icon--light {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+[data-theme="light"] .theme-toggle__icon--dark {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+[data-theme="dark"] .theme-toggle__icon--light {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+[data-theme="dark"] .theme-toggle__icon--dark {
+    opacity: 1;
+    transform: rotate(0deg);
 }
 
 /* ── Main ───────────────────────────────────────── */
@@ -93,7 +161,7 @@ body {
 /* ── Hero ───────────────────────────────────────── */
 .hero {
     text-align: center;
-    padding: 2rem 0 3rem;
+    padding: 1.5rem 0 2.5rem;
 }
 
 .hero h1 {
@@ -105,10 +173,34 @@ body {
 }
 
 .hero__subtitle {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     color: var(--text-muted);
     max-width: 500px;
-    margin: 0 auto;
+    margin: 0 auto 1.5rem;
+}
+
+/* ── Button ─────────────────────────────────────── */
+.btn {
+    display: inline-block;
+    padding: 0.7rem 1.8rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition);
+}
+
+.btn--primary {
+    background: var(--brand-color);
+    color: white;
+}
+
+.btn--primary:hover {
+    background: var(--brand-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
 }
 
 /* ── Weekplan Grid ──────────────────────────────── */
@@ -123,7 +215,7 @@ body {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
-    transition: box-shadow var(--transition), transform var(--transition);
+    transition: box-shadow var(--transition), transform var(--transition), background 0.3s ease;
 }
 
 .weekplan__day:hover {
@@ -131,73 +223,226 @@ body {
     transform: translateY(-2px);
 }
 
-.weekplan__day-name {
+.weekplan__day-header {
     background: var(--brand-color);
     color: white;
     text-align: center;
-    padding: 0.6rem;
-    font-size: 0.85rem;
+    padding: 0.5rem;
+}
+
+.weekplan__day-name {
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
+.weekplan__day-zeit {
+    font-size: 0.65rem;
+    opacity: 0.8;
+}
+
 .weekplan__meals {
-    padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    padding: 0.6rem;
 }
 
 .weekplan__meal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.6rem 0.75rem;
+    padding: 0.5rem;
     border-radius: 8px;
-    border: 1px dashed var(--border);
-    min-height: 3rem;
-    transition: border-color var(--transition), background var(--transition);
+    transition: background var(--transition);
 }
 
-.weekplan__meal:hover {
-    border-color: var(--brand-color);
-    background: var(--brand-light);
+.weekplan__meal--filled {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.25rem;
+}
+
+.weekplan__meal--empty {
+    border: 1px dashed var(--border);
+    text-align: center;
+    padding: 1rem 0.5rem;
+}
+
+.weekplan__meal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.weekplan__meal-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.weekplan__meal-meta {
+    font-size: 0.65rem;
+    color: var(--text-muted);
 }
 
 .weekplan__meal-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    font-weight: 500;
 }
 
-.weekplan__add-btn {
-    width: 28px;
-    height: 28px;
+.weekplan__detail-btn {
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    border: 2px solid var(--brand-color);
+    border: 1px solid var(--border);
     background: transparent;
-    color: var(--brand-color);
-    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-size: 0.6rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all var(--transition);
-    line-height: 1;
+    flex-shrink: 0;
 }
 
-.weekplan__add-btn:hover {
+.weekplan__detail-btn:hover {
     background: var(--brand-color);
     color: white;
+    border-color: var(--brand-color);
+}
+
+.weekplan__detail {
+    padding: 0.5rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.weekplan__detail h4 {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--brand-color);
+    margin: 0.5rem 0 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.weekplan__detail h4:first-child {
+    margin-top: 0;
+}
+
+.weekplan__detail ul,
+.weekplan__detail ol {
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    line-height: 1.5;
+}
+
+/* ── Einkaufsliste ──────────────────────────────── */
+.shopping {
+    margin-top: 3rem;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: background 0.3s ease;
+}
+
+.shopping__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.shopping__stores {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.shopping__store-tag {
+    background: var(--brand-light);
+    color: var(--brand-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+[data-theme="dark"] .shopping__store-tag {
+    background: var(--brand-light);
+    color: var(--brand-dark);
+}
+
+.shopping__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0.25rem;
+}
+
+.shopping__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.shopping__item:hover {
+    background: var(--brand-light);
+}
+
+.shopping__checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--check-bg);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all var(--transition);
+}
+
+.shopping__checkbox:checked {
+    background: var(--brand-color);
+    border-color: var(--brand-color);
+}
+
+.shopping__checkbox:checked + .shopping__item-name {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.shopping__item-name {
+    flex: 1;
+    font-size: 0.9rem;
+    transition: color var(--transition);
+}
+
+.shopping__item-days {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    white-space: nowrap;
 }
 
 /* ── Footer ─────────────────────────────────────── */
 .footer {
-    background: var(--text);
+    background: var(--footer-bg);
     color: rgba(255, 255, 255, 0.7);
     padding: 1.5rem 0;
     margin-top: auto;
+    transition: background 0.3s ease;
 }
 
 .footer__content {
@@ -316,6 +561,8 @@ body {
     border-radius: 8px;
     font-size: 0.9rem;
     font-family: inherit;
+    background: var(--bg);
+    color: var(--text);
     transition: border-color var(--transition);
 }
 
@@ -346,13 +593,23 @@ body {
 }
 
 /* ── Responsive ─────────────────────────────────── */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
     .weekplan__grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .weekplan__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .shopping__list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
     .weekplan__grid {
         grid-template-columns: 1fr;
     }
@@ -365,5 +622,9 @@ body {
         flex-direction: column;
         gap: 0.75rem;
         text-align: center;
+    }
+
+    .shopping {
+        padding: 1.25rem;
     }
 }

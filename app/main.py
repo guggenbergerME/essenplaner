@@ -6,6 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 
+from app.planner import generiere_wochenplan
+
 # ── App ──────────────────────────────────────────────
 app = FastAPI(
     title="essenplaner",
@@ -25,9 +27,26 @@ DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
 # ── Routes ───────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
+    daten = generiere_wochenplan()
     return templates.TemplateResponse("index.html", {
         "request": request,
         "dev_mode": DEV_MODE,
+        "plan": daten["plan"],
+        "einkaufsliste": daten["einkaufsliste"],
+        "laeden": daten["laeden"],
+    })
+
+
+@app.get("/api/neu", response_class=HTMLResponse)
+async def neuer_plan(request: Request):
+    """Generiert einen neuen zufaelligen Wochenplan."""
+    daten = generiere_wochenplan()
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "plan": daten["plan"],
+        "einkaufsliste": daten["einkaufsliste"],
+        "laeden": daten["laeden"],
     })
 
 

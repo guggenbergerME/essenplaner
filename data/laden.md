@@ -1,0 +1,5 @@
+# Geschaefte
+
+- norma
+- lidl
+- kaufland

@@ -5,27 +5,84 @@
 {% block content %}
 <section class="hero">
     <h1>Wochenplaner</h1>
-    <p class="hero__subtitle">Plane deine Mahlzeiten und erstelle automatisch eine Einkaufsliste.</p>
+    <p class="hero__subtitle">Deine Mahlzeiten fuer die Woche mit automatischer Einkaufsliste.</p>
+    <a href="/api/neu" class="btn btn--primary">Neuen Plan generieren</a>
 </section>
 
+<!-- Wochenplan -->
 <section class="weekplan">
     <div class="weekplan__grid">
-        {% set tage = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"] %}
-        {% for tag in tage %}
+        {% for eintrag in plan %}
         <div class="weekplan__day">
-            <h3 class="weekplan__day-name">{{ tag }}</h3>
+            <div class="weekplan__day-header">
+                <h3 class="weekplan__day-name">{{ eintrag.tag }}</h3>
+                <span class="weekplan__day-zeit">max. {{ eintrag.max_zeit }} Min.</span>
+            </div>
             <div class="weekplan__meals">
-                <div class="weekplan__meal weekplan__meal--empty">
-                    <span class="weekplan__meal-label">Mittag</span>
-                    <button class="weekplan__add-btn" title="Rezept hinzufügen">+</button>
+                {% if eintrag.rezept %}
+                <div class="weekplan__meal weekplan__meal--filled">
+                    <div class="weekplan__meal-info">
+                        <span class="weekplan__meal-name">{{ eintrag.rezept.name }}</span>
+                        <span class="weekplan__meal-meta">{{ eintrag.rezept.zubereitungszeit }} Min. | {{ eintrag.rezept.portionen }} Portionen</span>
+                    </div>
+                    <button class="weekplan__detail-btn" onclick="toggleDetail('detail-{{ loop.index }}')" title="Details anzeigen">&#9660;</button>
                 </div>
-                <div class="weekplan__meal weekplan__meal--empty">
-                    <span class="weekplan__meal-label">Abend</span>
-                    <button class="weekplan__add-btn" title="Rezept hinzufügen">+</button>
+                <div id="detail-{{ loop.index }}" class="weekplan__detail" style="display:none;">
+                    <h4>Zutaten</h4>
+                    <ul>
+                        {% for zutat in eintrag.rezept.zutaten %}
+                        <li>{{ zutat }}</li>
+                        {% endfor %}
+                    </ul>
+                    <h4>Zubereitung</h4>
+                    <ol>
+                        {% for schritt in eintrag.rezept.zubereitung %}
+                        <li>{{ schritt }}</li>
+                        {% endfor %}
+                    </ol>
                 </div>
+                {% else %}
+                <div class="weekplan__meal weekplan__meal--empty">
+                    <span class="weekplan__meal-label">Kein passendes Rezept</span>
+                </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
     </div>
 </section>
+
+<!-- Einkaufsliste -->
+<section class="shopping">
+    <h2 class="shopping__title">Einkaufsliste</h2>
+    {% if laeden %}
+    <p class="shopping__stores">Geschaefte: {% for laden in laeden %}<span class="shopping__store-tag">{{ laden }}</span>{% endfor %}</p>
+    {% endif %}
+    <div class="shopping__list">
+        {% for zutat, tage in einkaufsliste %}
+        <label class="shopping__item">
+            <input type="checkbox" class="shopping__checkbox">
+            <span class="shopping__item-name">{{ zutat }}</span>
+            <span class="shopping__item-days">{{ tage | join(", ") }}</span>
+        </label>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleDetail(id) {
+    const el = document.getElementById(id);
+    const btn = el.previousElementSibling.querySelector('.weekplan__detail-btn');
+    if (el.style.display === 'none') {
+        el.style.display = 'block';
+        btn.innerHTML = '&#9650;';
+    } else {
+        el.style.display = 'none';
+        btn.innerHTML = '&#9660;';
+    }
+}
+</script>
 {% endblock %}

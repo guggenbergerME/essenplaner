@@ -202,6 +202,34 @@ def lade_alle_rezepte():
     return rezepte
 
 
+def _skaliere_menge(text, faktor):
+    """Skaliert Mengenangaben in einem Zutat-String."""
+    if faktor == 1.0:
+        return text
+
+    def ersetze(match):
+        zahl = float(match.group(0).replace(",", "."))
+        neu = zahl * faktor
+        if neu == int(neu):
+            return str(int(neu))
+        return f"{neu:.1f}".replace(".", ",")
+
+    # Erste Zahl im String skalieren (z.B. "500g" -> "250g", "2 Zwiebeln" -> "1 Zwiebel")
+    return re.sub(r"\d+[.,]?\d*", ersetze, text, count=1)
+
+
+def skaliere_rezept(rezept, personen):
+    """Gibt eine Kopie des Rezepts mit skalierten Zutaten zurueck."""
+    original_portionen = rezept.get("portionen", 4)
+    faktor = personen / original_portionen
+
+    skaliert = dict(rezept)
+    skaliert["zutaten"] = [_skaliere_menge(z, faktor) for z in rezept["zutaten"]]
+    skaliert["portionen"] = personen
+    skaliert["original_portionen"] = original_portionen
+    return skaliert
+
+
 def filter_rezepte(rezepte, ausschluss):
     """Filtert Rezepte die ausgeschlossene Zutaten enthalten."""
     gefiltert = []
@@ -214,6 +242,10 @@ def filter_rezepte(rezepte, ausschluss):
 
 def generiere_wochenplan():
     """Generiert einen Wochenplan mit passenden Rezepten pro Tag."""
+    from app.settings import lade_einstellungen
+    settings = lade_einstellungen()
+    personen = settings.get("personen", 4)
+
     max_zeit = get_kochzeiten()
     ausschluss = parse_nichtverwenden()
     laeden = parse_laden()
@@ -249,6 +281,7 @@ def generiere_wochenplan():
         if passend:
             rezept = random.choice(passend)
             verwendete.add(rezept["name"])
+            rezept = skaliere_rezept(rezept, personen)
         else:
             rezept = None
 

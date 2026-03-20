@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, Response
 
-from app.planner import generiere_wochenplan, lade_alle_rezepte, parse_nichtverwenden, filter_rezepte
+from app.planner import generiere_wochenplan, lade_alle_rezepte, parse_nichtverwenden, filter_rezepte, skaliere_rezept
 from app.pdf_generator import einkaufsliste_pdf, rezept_pdf
 from app.settings import lade_einstellungen, speichere_einstellungen, TAGE_KURZ, TAGE_LANG
 
@@ -102,6 +102,10 @@ async def rezept_detail(request: Request, dateiname: str):
     if not rezept:
         return HTMLResponse("<h1>Rezept nicht gefunden</h1>", status_code=404)
 
+    settings = lade_einstellungen()
+    personen = settings.get("personen", 4)
+    rezept = skaliere_rezept(rezept, personen)
+
     return templates.TemplateResponse("rezept.html", {
         "request": request,
         "dev_mode": DEV_MODE,
@@ -121,6 +125,10 @@ async def rezept_pdf_download(dateiname: str):
 
     if not rezept:
         return Response("Rezept nicht gefunden", status_code=404)
+
+    settings = lade_einstellungen()
+    personen = settings.get("personen", 4)
+    rezept = skaliere_rezept(rezept, personen)
 
     pdf_bytes = rezept_pdf(rezept)
     safe_name = urllib.parse.quote(rezept["name"].replace(" ", "_"))

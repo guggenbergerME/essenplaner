@@ -70,13 +70,20 @@
     {% if laeden %}
     <p class="shopping__stores">Geschaefte: {% for laden in laeden %}<span class="shopping__store-tag">{{ laden }}</span>{% endfor %}</p>
     {% endif %}
-    <div class="shopping__list">
-        {% for zutat, tage in einkaufsliste %}
-        <label class="shopping__item">
-            <input type="checkbox" class="shopping__checkbox">
-            <span class="shopping__item-name">{{ zutat }}</span>
-            <span class="shopping__item-days">{{ tage | join(", ") }}</span>
-        </label>
+    <div class="shopping__grouped">
+        {% for abteilung, zutaten in einkaufsliste_gruppiert %}
+        <div class="shopping__section">
+            <h3 class="shopping__section-title">{{ abteilung }}</h3>
+            <div class="shopping__section-items">
+                {% for zutat, tage in zutaten %}
+                <label class="shopping__item">
+                    <input type="checkbox" class="shopping__checkbox">
+                    <span class="shopping__item-name">{{ zutat }}</span>
+                    <span class="shopping__item-days">{{ tage | join(", ") }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
         {% endfor %}
     </div>
 </section>

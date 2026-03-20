@@ -19,8 +19,8 @@ class SWPdf(FPDF):
         self.cell(0, 10, f"essenplaner | Seite {self.page_no()}", align="C")
 
 
-def einkaufsliste_pdf(einkaufsliste, laeden):
-    """Erzeugt ein SW-PDF der Einkaufsliste."""
+def einkaufsliste_pdf(einkaufsliste_gruppiert, laeden):
+    """Erzeugt ein SW-PDF der Einkaufsliste, nach Abteilungen sortiert."""
     pdf = SWPdf()
     pdf.title = "Einkaufsliste"
     pdf.add_page()
@@ -31,23 +31,26 @@ def einkaufsliste_pdf(einkaufsliste, laeden):
         pdf.cell(0, 6, f"Geschaefte: {', '.join(laeden)}", new_x="LMARGIN", new_y="NEXT")
         pdf.ln(3)
 
-    # Tabelle
-    pdf.set_font("Helvetica", "B", 10)
     col_check = 8
     col_zutat = 120
     col_tage = 62
 
-    pdf.cell(col_check, 7, "", border=1)
-    pdf.cell(col_zutat, 7, "Zutat", border=1)
-    pdf.cell(col_tage, 7, "Fuer", border=1, new_x="LMARGIN", new_y="NEXT")
+    for abteilung, zutaten in einkaufsliste_gruppiert:
+        # Abteilungs-Header
+        pdf.set_font("Helvetica", "B", 10)
+        pdf.set_fill_color(220, 220, 220)
+        pdf.cell(col_check + col_zutat + col_tage, 7, f"  {abteilung}", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
 
-    pdf.set_font("Helvetica", "", 9)
-    for i, (zutat, tage) in enumerate(einkaufsliste):
-        bg = 240 if i % 2 == 0 else 255
-        pdf.set_fill_color(bg, bg, bg)
-        pdf.cell(col_check, 6, "", border=1, fill=True)
-        pdf.cell(col_zutat, 6, zutat, border=1, fill=True)
-        pdf.cell(col_tage, 6, ", ".join(tage), border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+        # Zutaten
+        pdf.set_font("Helvetica", "", 9)
+        for i, (zutat, tage) in enumerate(zutaten):
+            bg = 245 if i % 2 == 0 else 255
+            pdf.set_fill_color(bg, bg, bg)
+            pdf.cell(col_check, 6, "", border=1, fill=True)
+            pdf.cell(col_zutat, 6, zutat, border=1, fill=True)
+            pdf.cell(col_tage, 6, ", ".join(tage), border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+
+        pdf.ln(1)
 
     buf = io.BytesIO()
     pdf.output(buf)

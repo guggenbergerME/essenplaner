@@ -47,6 +47,7 @@ async def index(request: Request):
         "dev_mode": DEV_MODE,
         "plan": daten["plan"],
         "einkaufsliste": daten["einkaufsliste"],
+        "einkaufsliste_gruppiert": daten["einkaufsliste_gruppiert"],
         "laeden": daten["laeden"],
         "personen": settings.get("personen", 4),
     })
@@ -61,6 +62,7 @@ async def neuer_plan(request: Request):
         "dev_mode": DEV_MODE,
         "plan": daten["plan"],
         "einkaufsliste": daten["einkaufsliste"],
+        "einkaufsliste_gruppiert": daten["einkaufsliste_gruppiert"],
         "laeden": daten["laeden"],
         "personen": settings.get("personen", 4),
     })
@@ -70,7 +72,7 @@ async def neuer_plan(request: Request):
 @app.get("/api/einkaufsliste.pdf")
 async def einkaufsliste_download():
     daten = _get_plan()
-    pdf_bytes = einkaufsliste_pdf(daten["einkaufsliste"], daten["laeden"])
+    pdf_bytes = einkaufsliste_pdf(daten["einkaufsliste_gruppiert"], daten["laeden"])
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",

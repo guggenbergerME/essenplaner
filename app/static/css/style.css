@@ -1,13 +1,13 @@
 /* ══════════════════════════════════════════════════
    essenplaner – Stylesheet
-   Stil: modern | Primaerfarbe: #2196F3
+   Stil: modern | Primaerfarbe: #1565C0
    Tag/Nacht-Modus via data-theme
    ══════════════════════════════════════════════════ */
 
 /* ── Light Theme (Standard) ─────────────────────── */
 :root, [data-theme="light"] {
-    --brand-color: #2196F3;
-    --brand-dark: #1565C0;
+    --brand-color: #1565C0;
+    --brand-dark: #0D47A1;
     --brand-light: #BBDEFB;
     --bg: #f5f7fa;
     --bg-card: #ffffff;
@@ -773,6 +773,37 @@ body {
 
 .settings__day-hint {
     font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.settings__personen {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.settings__personen-input {
+    width: 80px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    font-weight: 600;
+    text-align: center;
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color var(--transition);
+}
+
+.settings__personen-input:focus {
+    outline: none;
+    border-color: var(--brand-color);
+    box-shadow: 0 0 0 3px var(--brand-light);
+}
+
+.settings__personen-label {
+    font-size: 0.95rem;
     color: var(--text-muted);
 }
 

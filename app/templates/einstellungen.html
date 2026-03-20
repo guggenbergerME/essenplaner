@@ -31,6 +31,24 @@
             </div>
         </div>
 
+        <!-- Personen -->
+        <div class="settings__section">
+            <h2 class="settings__section-title">Anzahl Personen</h2>
+            <p class="settings__section-desc">Fuer wie viele Personen soll gekocht werden?</p>
+            <div class="settings__personen">
+                <input
+                    type="number"
+                    name="personen"
+                    id="personen"
+                    value="{{ settings.personen | default(4) }}"
+                    min="1"
+                    max="20"
+                    class="settings__personen-input"
+                >
+                <span class="settings__personen-label">Personen</span>
+            </div>
+        </div>
+
         <!-- Arbeitszeiten -->
         <div class="settings__section">
             <h2 class="settings__section-title">Arbeitszeiten</h2>

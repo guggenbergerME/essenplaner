@@ -11,6 +11,7 @@ TAGE_LANG = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag
 
 DEFAULT_SETTINGS = {
     "starttag": "Mo",
+    "personen": 4,
     "arbeitszeiten": {
         "Mo": "7-18",
         "Di": "7-13",

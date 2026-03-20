@@ -41,24 +41,28 @@ def _get_plan(neu=False):
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     daten = _get_plan()
+    settings = lade_einstellungen()
     return templates.TemplateResponse("index.html", {
         "request": request,
         "dev_mode": DEV_MODE,
         "plan": daten["plan"],
         "einkaufsliste": daten["einkaufsliste"],
         "laeden": daten["laeden"],
+        "personen": settings.get("personen", 4),
     })
 
 
 @app.get("/api/neu", response_class=HTMLResponse)
 async def neuer_plan(request: Request):
     daten = _get_plan(neu=True)
+    settings = lade_einstellungen()
     return templates.TemplateResponse("index.html", {
         "request": request,
         "dev_mode": DEV_MODE,
         "plan": daten["plan"],
         "einkaufsliste": daten["einkaufsliste"],
         "laeden": daten["laeden"],
+        "personen": settings.get("personen", 4),
     })
 
 
@@ -144,6 +148,10 @@ async def einstellungen_speichern(request: Request):
     settings = lade_einstellungen()
 
     settings["starttag"] = form.get("starttag", "Mo")
+    try:
+        settings["personen"] = max(1, int(form.get("personen", 4)))
+    except (ValueError, TypeError):
+        settings["personen"] = 4
     for tag in TAGE_KURZ:
         settings["arbeitszeiten"][tag] = form.get(f"zeit_{tag}", "").strip()
 

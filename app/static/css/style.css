@@ -414,6 +414,24 @@ body {
     font-size: 0.8rem;
 }
 
+.btn--outline {
+    background: transparent;
+    color: var(--brand-color);
+    border: 2px solid var(--brand-color);
+}
+
+.btn--outline:hover {
+    background: var(--brand-color);
+    color: white;
+}
+
+.hero__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .shopping__stores {
     font-size: 0.85rem;
     color: var(--text-muted);

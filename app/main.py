@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, Response
 
 from app.planner import generiere_wochenplan, lade_alle_rezepte, parse_nichtverwenden, filter_rezepte, skaliere_rezept
-from app.pdf_generator import einkaufsliste_pdf, rezept_pdf
+from app.pdf_generator import einkaufsliste_pdf, rezept_pdf, wochenplan_pdf
 from app.settings import lade_einstellungen, speichere_einstellungen, TAGE_KURZ, TAGE_LANG
 
 # ── App ──────────────────────────────────────────────
@@ -66,6 +66,20 @@ async def neuer_plan(request: Request):
         "laeden": daten["laeden"],
         "personen": settings.get("personen", 4),
     })
+
+
+# ── Wochenplan Komplett-PDF ────────────────────────
+@app.get("/api/wochenplan.pdf")
+async def wochenplan_download():
+    daten = _get_plan()
+    settings = lade_einstellungen()
+    personen = settings.get("personen", 4)
+    pdf_bytes = wochenplan_pdf(daten["plan"], daten["einkaufsliste_gruppiert"], daten["laeden"], personen)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=wochenplan.pdf"},
+    )
 
 
 # ── Einkaufsliste PDF ───────────────────────────────

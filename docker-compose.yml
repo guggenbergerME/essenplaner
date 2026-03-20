@@ -1,7 +1,7 @@
 services:
   essenplaner:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile
     container_name: essenplaner
     restart: unless-stopped
@@ -10,4 +10,4 @@ services:
     environment:
       - DEV_MODE=false
     volumes:
-      - ../data:/app/data
+      - ./data:/app/data

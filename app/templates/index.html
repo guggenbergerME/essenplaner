@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}essenplaner – Wochenplaner{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Wochenplaner</h1>
+    <p class="hero__subtitle">Plane deine Mahlzeiten und erstelle automatisch eine Einkaufsliste.</p>
+</section>
+
+<section class="weekplan">
+    <div class="weekplan__grid">
+        {% set tage = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"] %}
+        {% for tag in tage %}
+        <div class="weekplan__day">
+            <h3 class="weekplan__day-name">{{ tag }}</h3>
+            <div class="weekplan__meals">
+                <div class="weekplan__meal weekplan__meal--empty">
+                    <span class="weekplan__meal-label">Mittag</span>
+                    <button class="weekplan__add-btn" title="Rezept hinzufügen">+</button>
+                </div>
+                <div class="weekplan__meal weekplan__meal--empty">
+                    <span class="weekplan__meal-label">Abend</span>
+                    <button class="weekplan__add-btn" title="Rezept hinzufügen">+</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

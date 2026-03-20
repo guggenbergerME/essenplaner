@@ -1,0 +1,68 @@
+<!-- Bug-Melde-Modus (nur sichtbar wenn DEV_MODE=true) -->
+<div id="bug-report-toggle" class="bug-toggle" onclick="toggleBugReport()">
+    &#128027;
+</div>
+
+<div id="bug-report-modal" class="bug-modal" style="display:none;">
+    <div class="bug-modal__content">
+        <div class="bug-modal__header">
+            <h3>Bug melden</h3>
+            <button class="bug-modal__close" onclick="toggleBugReport()">&times;</button>
+        </div>
+        <form id="bug-report-form" onsubmit="submitBugReport(event)">
+            <div class="bug-modal__field">
+                <label for="bug-title">Titel</label>
+                <input type="text" id="bug-title" name="title" required placeholder="Kurze Beschreibung des Problems">
+            </div>
+            <div class="bug-modal__field">
+                <label for="bug-desc">Beschreibung</label>
+                <textarea id="bug-desc" name="description" rows="4" required placeholder="Was ist passiert? Was wurde erwartet?"></textarea>
+            </div>
+            <div class="bug-modal__field">
+                <label for="bug-priority">Priorität</label>
+                <select id="bug-priority" name="priority">
+                    <option value="low">Niedrig</option>
+                    <option value="medium" selected>Mittel</option>
+                    <option value="high">Hoch</option>
+                </select>
+            </div>
+            <button type="submit" class="bug-modal__submit">Bug melden</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleBugReport() {
+    const modal = document.getElementById('bug-report-modal');
+    modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function submitBugReport(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        title: form.title.value,
+        description: form.description.value,
+        priority: form.priority.value,
+        url: window.location.href,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        const resp = await fetch('/api/bug-report', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (resp.ok) {
+            alert('Bug wurde gemeldet!');
+            form.reset();
+            toggleBugReport();
+        } else {
+            alert('Fehler beim Melden des Bugs.');
+        }
+    } catch (err) {
+        alert('Fehler: ' + err.message);
+    }
+}
+</script>

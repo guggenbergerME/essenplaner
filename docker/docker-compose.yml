@@ -1,0 +1,13 @@
+services:
+  essenplaner:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: essenplaner
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - DEV_MODE=false
+    volumes:
+      - ../data:/app/data

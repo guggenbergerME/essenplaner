@@ -1,0 +1,369 @@
+/* ══════════════════════════════════════════════════
+   essenplaner – Stylesheet
+   Stil: modern | Primärfarbe: #2196F3
+   ══════════════════════════════════════════════════ */
+
+:root {
+    --brand-color: #2196F3;
+    --brand-dark: #1565C0;
+    --brand-light: #BBDEFB;
+    --bg: #f5f7fa;
+    --bg-card: #ffffff;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 12px;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --transition: 0.2s ease;
+}
+
+/* ── Reset ──────────────────────────────────────── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ── Header ─────────────────────────────────────── */
+.header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header__logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brand-color);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+}
+
+.header__nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.header__nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition);
+}
+
+.header__nav a:hover {
+    color: var(--brand-color);
+}
+
+/* ── Main ───────────────────────────────────────── */
+.main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+/* ── Hero ───────────────────────────────────────── */
+.hero {
+    text-align: center;
+    padding: 2rem 0 3rem;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
+}
+
+.hero__subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* ── Weekplan Grid ──────────────────────────────── */
+.weekplan__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.75rem;
+}
+
+.weekplan__day {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.weekplan__day:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.weekplan__day-name {
+    background: var(--brand-color);
+    color: white;
+    text-align: center;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.weekplan__meals {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.weekplan__meal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    border: 1px dashed var(--border);
+    min-height: 3rem;
+    transition: border-color var(--transition), background var(--transition);
+}
+
+.weekplan__meal:hover {
+    border-color: var(--brand-color);
+    background: var(--brand-light);
+}
+
+.weekplan__meal-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.weekplan__add-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--brand-color);
+    background: transparent;
+    color: var(--brand-color);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+    line-height: 1;
+}
+
+.weekplan__add-btn:hover {
+    background: var(--brand-color);
+    color: white;
+}
+
+/* ── Footer ─────────────────────────────────────── */
+.footer {
+    background: var(--text);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 1.5rem 0;
+    margin-top: auto;
+}
+
+.footer__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer__text {
+    font-size: 0.85rem;
+}
+
+.footer__text strong {
+    color: white;
+}
+
+.footer__links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer__link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color var(--transition);
+}
+
+.footer__link:hover {
+    color: var(--brand-light);
+}
+
+/* ── Bug-Report (DEV_MODE) ──────────────────────── */
+.bug-toggle {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ff5252;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.4);
+    z-index: 1000;
+    transition: transform var(--transition);
+}
+
+.bug-toggle:hover {
+    transform: scale(1.1);
+}
+
+.bug-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    backdrop-filter: blur(4px);
+}
+
+.bug-modal__content {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2rem;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.bug-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.bug-modal__header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.bug-modal__close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.25rem;
+}
+
+.bug-modal__field {
+    margin-bottom: 1rem;
+}
+
+.bug-modal__field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--text);
+}
+
+.bug-modal__field input,
+.bug-modal__field textarea,
+.bug-modal__field select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color var(--transition);
+}
+
+.bug-modal__field input:focus,
+.bug-modal__field textarea:focus,
+.bug-modal__field select:focus {
+    outline: none;
+    border-color: var(--brand-color);
+    box-shadow: 0 0 0 3px var(--brand-light);
+}
+
+.bug-modal__submit {
+    width: 100%;
+    padding: 0.75rem;
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+    margin-top: 0.5rem;
+}
+
+.bug-modal__submit:hover {
+    background: #d32f2f;
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 900px) {
+    .weekplan__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .weekplan__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .footer__content {
+        flex-direction: column;
+        gap: 0.75rem;
+        text-align: center;
+    }
+}

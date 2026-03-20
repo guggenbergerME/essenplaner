@@ -13,7 +13,7 @@
     <p class="hero__subtitle">Mahlzeiten fuer {{ personen }} Personen mit automatischer Einkaufsliste.</p>
     <div class="hero__actions">
         <a href="/api/neu" class="btn btn--primary">Neuen Plan generieren</a>
-        <a href="/api/wochenplan.pdf" class="btn btn--outline" target="_blank">Komplett-PDF</a>
+        <a href="/api/wochenplan.pdf" class="btn btn--outline">Komplett-PDF</a>
     </div>
 </section>
 
@@ -30,7 +30,7 @@
                 {% if eintrag.rezept %}
                 <div class="weekplan__meal weekplan__meal--filled">
                     <div class="weekplan__meal-info">
-                        <a href="/rezept/{{ eintrag.rezept.datei }}" class="weekplan__meal-name" target="_blank">{{ eintrag.rezept.name }}</a>
+                        <a href="/rezept/{{ eintrag.rezept.datei }}" class="weekplan__meal-name">{{ eintrag.rezept.name }}</a>
                         <span class="weekplan__meal-meta">{{ eintrag.rezept.zubereitungszeit }} Min. | {{ eintrag.rezept.portionen }} Port.</span>
                     </div>
                     <button class="weekplan__detail-btn" onclick="toggleDetail('detail-{{ loop.index }}')" title="Details anzeigen">&#9660;</button>
@@ -49,8 +49,8 @@
                         {% endfor %}
                     </ol>
                     <div class="weekplan__detail-actions">
-                        <a href="/rezept/{{ eintrag.rezept.datei }}" class="weekplan__detail-link" target="_blank">Rezept oeffnen</a>
-                        <a href="/api/rezept/{{ eintrag.rezept.datei }}/pdf" class="weekplan__detail-link" target="_blank">PDF</a>
+                        <a href="/rezept/{{ eintrag.rezept.datei }}" class="weekplan__detail-link">Rezept oeffnen</a>
+                        <a href="/api/rezept/{{ eintrag.rezept.datei }}/pdf" class="weekplan__detail-link">PDF</a>
                     </div>
                 </div>
                 {% else %}
@@ -68,7 +68,7 @@
 <section class="shopping">
     <div class="shopping__header">
         <h2 class="shopping__title">Einkaufsliste</h2>
-        <a href="/api/einkaufsliste.pdf" class="btn btn--primary btn--small" target="_blank">PDF herunterladen</a>
+        <a href="/api/einkaufsliste.pdf" class="btn btn--primary btn--small">PDF herunterladen</a>
     </div>
     {% if laeden %}
     <p class="shopping__stores">Geschaefte: {% for laden in laeden %}<span class="shopping__store-tag">{{ laden }}</span>{% endfor %}</p>

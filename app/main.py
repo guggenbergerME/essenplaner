@@ -25,7 +25,7 @@ from app.email_service import send_password_email
 # ── App ──────────────────────────────────────────────
 app = FastAPI(
     title="essenplaner",
-    description="Wochenplaner fuer Mahlzeiten mit Einkaufsliste",
+    description="Wochenplaner für Mahlzeiten mit Einkaufsliste",
     version="2.0.0",
 )
 
@@ -54,7 +54,7 @@ def _get_plan(neu=False):
 # ── Auth-Hilfsfunktionen ────────────────────────────
 
 def _get_current_user(request: Request):
-    """Gibt den aktuellen Nutzer zurueck oder None."""
+    """Gibt den aktuellen Nutzer zurück oder None."""
     token = request.cookies.get(SESSION_COOKIE)
     if not token:
         return None
@@ -65,12 +65,12 @@ def _get_current_user(request: Request):
 
 
 def _require_login(request: Request):
-    """Gibt den Nutzer zurueck oder None (fuer Redirect)."""
+    """Gibt den Nutzer zurück oder None (für Redirect)."""
     return _get_current_user(request)
 
 
 def _is_admin(user):
-    """Prueft ob ein Nutzer der Admin ist."""
+    """Prüft ob ein Nutzer der Admin ist."""
     return user and is_admin_email(user["email"])
 
 
@@ -138,10 +138,10 @@ async def registrieren(request: Request):
         return templates.TemplateResponse("registrieren.html", {
             "request": request,
             "dev_mode": DEV_MODE,
-            "fehler": "Bitte gib eine gueltige E-Mail-Adresse ein.",
+            "fehler": "Bitte gib eine gültige E-Mail-Adresse ein.",
         })
 
-    # Pruefen ob E-Mail schon registriert
+    # Prüfen ob E-Mail schon registriert
     existing = get_user_by_email(email)
     if existing:
         return templates.TemplateResponse("registrieren.html", {
@@ -429,7 +429,7 @@ async def passwort_aendern(request: Request):
         return templates.TemplateResponse("passwort_aendern.html", ctx)
 
     if neues_pw != neues_pw2:
-        ctx["fehler"] = "Die neuen Passwoerter stimmen nicht ueberein."
+        ctx["fehler"] = "Die neuen Passwörter stimmen nicht überein."
         return templates.TemplateResponse("passwort_aendern.html", ctx)
 
     update_user_password(user["id"], hash_password(neues_pw))
@@ -608,7 +608,7 @@ async def admin_user_loeschen(request: Request, user_id: int):
     if not user or not _is_admin(user):
         return RedirectResponse("/", status_code=303)
 
-    # Admin kann sich nicht selbst loeschen
+    # Admin kann sich nicht selbst löschen
     if user_id == user["id"]:
         return RedirectResponse("/admin", status_code=303)
 

@@ -21,7 +21,7 @@
                     </button>
                     <div id="userMenu" class="header__dropdown" style="display:none;">
                         <span class="header__dropdown-email">{{ user.email }}</span>
-                        <a href="/passwort-aendern" class="header__dropdown-item">Passwort aendern</a>
+                        <a href="/passwort-aendern" class="header__dropdown-item">Passwort ändern</a>
                         <a href="/logout" class="header__dropdown-item header__dropdown-item--logout">Abmelden</a>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
         }
     }
 
-    // Klick ausserhalb schliesst Dropdown
+    // Klick außerhalb schließt Dropdown
     document.addEventListener('click', function(e) {
         const menu = document.getElementById('userMenu');
         const btn = document.querySelector('.header__user-btn');

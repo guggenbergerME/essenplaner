@@ -12,7 +12,7 @@
 {% block content %}
 <section class="settings">
     <h1 class="settings__title">Nutzerverwaltung</h1>
-    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Registrierte Nutzer verwalten und bei Bedarf loeschen.</p>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Registrierte Nutzer verwalten und bei Bedarf löschen.</p>
 
     <div class="settings__section">
         <table class="admin-table">
@@ -43,8 +43,8 @@
                     </td>
                     <td>
                         {% if u.email != user.email %}
-                        <form method="POST" action="/admin/user/{{ u.id }}/loeschen" onsubmit="return confirm('Nutzer {{ u.email }} wirklich loeschen?');">
-                            <button type="submit" class="btn btn--danger btn--small">Loeschen</button>
+                        <form method="POST" action="/admin/user/{{ u.id }}/löschen" onsubmit="return confirm('Nutzer {{ u.email }} wirklich löschen?');">
+                            <button type="submit" class="btn btn--danger btn--small">Löschen</button>
                         </form>
                         {% endif %}
                     </td>

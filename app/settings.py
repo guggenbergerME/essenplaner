@@ -29,7 +29,7 @@ def lade_einstellungen():
     if SETTINGS_FILE.exists():
         try:
             data = json.loads(SETTINGS_FILE.read_text(encoding="utf-8"))
-            # Defaults fuer fehlende Keys
+            # Defaults für fehlende Keys
             for key, val in DEFAULT_SETTINGS.items():
                 if key not in data:
                     data[key] = val
@@ -75,7 +75,7 @@ def berechne_kochzeit(arbeitszeit_str):
 
 
 def get_kochzeiten():
-    """Gibt dict mit max Kochzeit pro Tag zurueck."""
+    """Gibt dict mit max Kochzeit pro Tag zurück."""
     settings = lade_einstellungen()
     zeiten = {}
     for tag in TAGE_KURZ:
@@ -85,7 +85,7 @@ def get_kochzeiten():
 
 
 def get_tage_reihenfolge():
-    """Gibt Tage in der richtigen Reihenfolge ab Starttag zurueck."""
+    """Gibt Tage in der richtigen Reihenfolge ab Starttag zurück."""
     settings = lade_einstellungen()
     starttag = settings.get("starttag", "Mo")
     if starttag not in TAGE_KURZ:

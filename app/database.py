@@ -1,4 +1,4 @@
-"""SQLite-Datenbank fuer Nutzer und Favoriten."""
+"""SQLite-Datenbank für Nutzer und Favoriten."""
 
 import json
 import sqlite3
@@ -9,7 +9,7 @@ DB_PATH = BASE_DIR / "data" / "essenplaner.db"
 
 
 def get_db():
-    """Gibt eine SQLite-Verbindung zurueck."""
+    """Gibt eine SQLite-Verbindung zurück."""
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
@@ -59,7 +59,7 @@ def create_user(email, password_hash):
 
 
 def get_user_by_email(email):
-    """Gibt einen Nutzer anhand der E-Mail zurueck."""
+    """Gibt einen Nutzer anhand der E-Mail zurück."""
     conn = get_db()
     user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
     conn.close()
@@ -67,7 +67,7 @@ def get_user_by_email(email):
 
 
 def get_user_by_id(user_id):
-    """Gibt einen Nutzer anhand der ID zurueck."""
+    """Gibt einen Nutzer anhand der ID zurück."""
     conn = get_db()
     user = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
     conn.close()
@@ -75,7 +75,7 @@ def get_user_by_id(user_id):
 
 
 def get_all_users():
-    """Gibt alle Nutzer zurueck."""
+    """Gibt alle Nutzer zurück."""
     conn = get_db()
     users = conn.execute("SELECT id, email, is_active, created_at FROM users ORDER BY created_at DESC").fetchall()
     conn.close()
@@ -83,7 +83,7 @@ def get_all_users():
 
 
 def delete_user(user_id):
-    """Loescht einen Nutzer."""
+    """Löscht einen Nutzer."""
     conn = get_db()
     conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
     conn.commit()
@@ -112,7 +112,7 @@ def save_favorit(user_id, name, plan_data):
 
 
 def get_favoriten(user_id):
-    """Gibt alle Favoriten eines Nutzers zurueck."""
+    """Gibt alle Favoriten eines Nutzers zurück."""
     conn = get_db()
     favs = conn.execute(
         "SELECT id, name, created_at FROM favoriten WHERE user_id = ? ORDER BY created_at DESC",
@@ -123,7 +123,7 @@ def get_favoriten(user_id):
 
 
 def get_favorit(favorit_id, user_id):
-    """Gibt einen einzelnen Favoriten zurueck."""
+    """Gibt einen einzelnen Favoriten zurück."""
     conn = get_db()
     fav = conn.execute(
         "SELECT * FROM favoriten WHERE id = ? AND user_id = ?",
@@ -138,7 +138,7 @@ def get_favorit(favorit_id, user_id):
 
 
 def delete_favorit(favorit_id, user_id):
-    """Loescht einen Favoriten."""
+    """Löscht einen Favoriten."""
     conn = get_db()
     conn.execute("DELETE FROM favoriten WHERE id = ? AND user_id = ?", (favorit_id, user_id))
     conn.commit()

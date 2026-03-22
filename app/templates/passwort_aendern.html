@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Passwort aendern – essenplaner{% endblock %}
+{% block title %}Passwort ändern – essenplaner{% endblock %}
 
 {% block nav %}
 <a href="/">Wochenplan</a>
@@ -11,14 +11,14 @@
 
 {% block content %}
 <section class="settings">
-    <h1 class="settings__title">Passwort aendern</h1>
+    <h1 class="settings__title">Passwort ändern</h1>
 
     {% if fehler %}
     <div class="auth__alert auth__alert--error">{{ fehler }}</div>
     {% endif %}
 
     {% if erfolg %}
-    <div class="settings__alert">Passwort wurde erfolgreich geaendert!</div>
+    <div class="settings__alert">Passwort wurde erfolgreich geändert!</div>
     {% endif %}
 
     <form method="POST" action="/passwort-aendern" class="settings__form">
@@ -36,7 +36,7 @@
                 <input type="password" id="neues_passwort2" name="neues_passwort2" required minlength="8">
             </div>
         </div>
-        <button type="submit" class="btn btn--primary">Passwort aendern</button>
+        <button type="submit" class="btn btn--primary">Passwort ändern</button>
     </form>
 </section>
 {% endblock %}

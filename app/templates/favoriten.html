@@ -11,8 +11,8 @@
 
 {% block content %}
 <section class="settings">
-    <h1 class="settings__title">Gespeicherte Wochenplaene</h1>
-    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Deine als Favorit gespeicherten Wochenplaene.</p>
+    <h1 class="settings__title">Gespeicherte Wochenpläne</h1>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Deine als Favorit gespeicherten Wochenpläne.</p>
 
     {% if favoriten %}
     <div class="favoriten__grid">
@@ -24,8 +24,8 @@
             </div>
             <div class="favoriten__actions">
                 <a href="/favorit/{{ fav.id }}" class="btn btn--primary btn--small">Anzeigen</a>
-                <form method="POST" action="/favorit/{{ fav.id }}/loeschen" style="display:inline;">
-                    <button type="submit" class="btn btn--danger btn--small" onclick="return confirm('Favorit loeschen?');">Loeschen</button>
+                <form method="POST" action="/favorit/{{ fav.id }}/löschen" style="display:inline;">
+                    <button type="submit" class="btn btn--danger btn--small" onclick="return confirm('Favorit löschen?');">Löschen</button>
                 </form>
             </div>
         </div>

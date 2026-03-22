@@ -101,7 +101,7 @@ ZUTAT_ABTEILUNG = {
 def zutat_zu_abteilung(zutat_text):
     """Ordnet eine Zutat einer Supermarkt-Abteilung zu."""
     text = zutat_text.lower()
-    # Laengere Keys zuerst pruefen (z.B. "gehackte tomaten" vor "tomaten")
+    # Längere Keys zuerst prüfen (z.B. "gehackte tomaten" vor "tomaten")
     for key in sorted(ZUTAT_ABTEILUNG.keys(), key=len, reverse=True):
         if key in text:
             return ZUTAT_ABTEILUNG[key]
@@ -109,7 +109,7 @@ def zutat_zu_abteilung(zutat_text):
 
 
 def parse_nichtverwenden():
-    """Liest nichtverwenden.md und gibt eine Liste ausgeschlossener Zutaten zurueck."""
+    """Liest nichtverwenden.md und gibt eine Liste ausgeschlossener Zutaten zurück."""
     datei = DATA_DIR / "nichtverwenden.md"
     ausschluss = []
     if datei.exists():
@@ -121,7 +121,7 @@ def parse_nichtverwenden():
 
 
 def parse_laden():
-    """Liest laden.md und gibt eine Liste der Geschaefte zurueck."""
+    """Liest laden.md und gibt eine Liste der Geschäfte zurück."""
     datei = DATA_DIR / "laden.md"
     laeden = []
     if datei.exists():
@@ -223,7 +223,7 @@ def parse_rezept(filepath):
             continue
 
         if in_naehrwerte and stripped.startswith("|"):
-            # Header-Zeilen ueberspringen
+            # Header-Zeilen überspringen
             if "|---|" in stripped or "| Naehrwert" in stripped:
                 continue
             cells = [c.strip() for c in stripped.split("|") if c.strip()]
@@ -295,7 +295,7 @@ def _runde_einkaufsmenge(text):
 
 
 def skaliere_rezept(rezept, personen):
-    """Gibt eine Kopie des Rezepts mit skalierten Zutaten zurueck."""
+    """Gibt eine Kopie des Rezepts mit skalierten Zutaten zurück."""
     original_portionen = rezept.get("portionen", 4)
     faktor = personen / original_portionen
 
@@ -427,7 +427,7 @@ def generiere_wochenplan():
         if abt in abteilungen:
             einkaufsliste_gruppiert.append((abt, abteilungen[abt]))
 
-    # Flache Liste fuer PDF-Kompatibilitaet
+    # Flache Liste für PDF-Kompatibilität
     einkaufsliste_flat = []
     for abt, zutaten in einkaufsliste_gruppiert:
         einkaufsliste_flat.extend(zutaten)

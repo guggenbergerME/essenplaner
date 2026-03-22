@@ -6,7 +6,7 @@
 <section class="auth">
     <div class="auth__card">
         <h1 class="auth__title">Registrieren</h1>
-        <p class="auth__subtitle">Gib deine E-Mail-Adresse ein. Du erhaeltst dein Passwort per E-Mail.</p>
+        <p class="auth__subtitle">Gib deine E-Mail-Adresse ein. Du erhältst dein Passwort per E-Mail.</p>
 
         {% if fehler %}
         <div class="auth__alert auth__alert--error">{{ fehler }}</div>
@@ -15,7 +15,7 @@
         {% if erfolg %}
         <div class="auth__alert auth__alert--success">
             Registrierung erfolgreich! Dein Passwort wurde an <strong>{{ email }}</strong> gesendet.
-            <br>Pruefe dein Postfach und melde dich dann an.
+            <br>Prüfe dein Postfach und melde dich dann an.
         </div>
         <a href="/login" class="btn btn--primary btn--full" style="margin-top: 1rem;">Zum Login</a>
         {% else %}
@@ -32,7 +32,7 @@
             Schon ein Konto? <a href="/login" class="auth__link">Zum Login</a>
         </p>
         <p class="auth__footer-text" style="margin-top: 0.5rem;">
-            <a href="/" class="auth__link">&larr; Zurueck zur Startseite</a>
+            <a href="/" class="auth__link">&larr; Zurück zur Startseite</a>
         </p>
     </div>
 </section>

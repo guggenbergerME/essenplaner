@@ -1,4 +1,4 @@
-"""PDF-Generierung fuer Einkaufsliste und Rezepte (Schwarz-Weiss)."""
+"""PDF-Generierung für Einkaufsliste und Rezepte (Schwarz-Weiß)."""
 
 import io
 from fpdf import FPDF
@@ -25,10 +25,10 @@ def einkaufsliste_pdf(einkaufsliste_gruppiert, laeden):
     pdf.title = "Einkaufsliste"
     pdf.add_page()
 
-    # Geschaefte
+    # Geschäfte
     if laeden:
         pdf.set_font("Helvetica", "I", 9)
-        pdf.cell(0, 6, f"Geschaefte: {', '.join(laeden)}", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 6, f"Geschäfte: {', '.join(laeden)}", new_x="LMARGIN", new_y="NEXT")
         pdf.ln(3)
 
     col_check = 8
@@ -110,7 +110,7 @@ def wochenplan_pdf(plan, einkaufsliste_gruppiert, laeden, personen):
     pdf.cell(0, 6, f"Fuer {personen} Personen", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(3)
 
-    # Wochenuebersicht als Tabelle
+    # Wochenübersicht als Tabelle
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_fill_color(200, 200, 200)
     pdf.cell(45, 7, "Tag", border=1, fill=True)
@@ -176,7 +176,7 @@ def wochenplan_pdf(plan, einkaufsliste_gruppiert, laeden, personen):
 
     if laeden:
         pdf.set_font("Helvetica", "I", 9)
-        pdf.cell(0, 6, f"Geschaefte: {', '.join(laeden)}", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 6, f"Geschäfte: {', '.join(laeden)}", new_x="LMARGIN", new_y="NEXT")
         pdf.ln(3)
 
     col_check = 8
@@ -205,7 +205,7 @@ def wochenplan_pdf(plan, einkaufsliste_gruppiert, laeden, personen):
 
 
 def monatsplan_pdf(wochen, personen):
-    """Erzeugt ein Komplett-PDF fuer einen Monatsplan (4 Wochen)."""
+    """Erzeugt ein Komplett-PDF für einen Monatsplan (4 Wochen)."""
     pdf = SWPdf()
     pdf.title = "Monatsplan"
     pdf.add_page()

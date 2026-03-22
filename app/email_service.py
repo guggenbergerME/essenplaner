@@ -1,4 +1,4 @@
-"""E-Mail-Versand fuer Einmal-Passwoerter."""
+"""E-Mail-Versand für Einmal-Passwörter."""
 
 import os
 import smtplib
@@ -16,7 +16,7 @@ SMTP_TLS = os.getenv("SMTP_TLS", "true").lower() == "true"
 def send_password_email(to_email: str, password: str) -> bool:
     """Sendet das Einmal-Passwort per E-Mail."""
     if not all([SMTP_HOST, SMTP_USER, SMTP_PASSWORD, SMTP_FROM]):
-        print(f"[MAIL] SMTP nicht konfiguriert. Passwort fuer {to_email}: {password}")
+        print(f"[MAIL] SMTP nicht konfiguriert. Passwort für {to_email}: {password}")
         return False
 
     msg = MIMEMultipart("alternative")
@@ -30,9 +30,9 @@ du hast dich beim essenplaner registriert.
 
 Dein Passwort lautet: {password}
 
-Bitte melde dich damit an. Du kannst das Passwort nach dem Login in den Einstellungen aendern.
+Bitte melde dich damit an. Du kannst das Passwort nach dem Login in den Einstellungen ändern.
 
-Viele Gruesse
+Viele Grüße
 essenplaner
 """
 
@@ -46,9 +46,9 @@ essenplaner
             <strong>Dein Passwort:</strong>
             <span style="display: inline-block; background: #0A2463; color: white; padding: 0.5rem 1.5rem; border-radius: 8px; font-size: 1.2rem; font-family: monospace; letter-spacing: 0.1em; margin-left: 0.5rem;">{password}</span>
         </p>
-        <p>Bitte melde dich damit an. Du kannst das Passwort nach dem Login in den Einstellungen aendern.</p>
+        <p>Bitte melde dich damit an. Du kannst das Passwort nach dem Login in den Einstellungen ändern.</p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 1.5rem 0;">
-        <p style="font-size: 0.85rem; color: #6b7280;">Viele Gruesse<br>essenplaner</p>
+        <p style="font-size: 0.85rem; color: #6b7280;">Viele Grüße<br>essenplaner</p>
     </div>
 </body>
 </html>"""
@@ -70,5 +70,5 @@ essenplaner
         return True
     except Exception as e:
         print(f"[MAIL] Fehler beim Senden an {to_email}: {e}")
-        print(f"[MAIL] Passwort fuer {to_email}: {password}")
+        print(f"[MAIL] Passwort für {to_email}: {password}")
         return False

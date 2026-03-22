@@ -22,7 +22,7 @@ def hash_password(password: str) -> str:
 
 
 def verify_password(password: str, password_hash: str) -> bool:
-    """Prueft ein Passwort gegen einen Hash."""
+    """Prüft ein Passwort gegen einen Hash."""
     return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
 
 
@@ -32,7 +32,7 @@ def create_session_token(user_id: int) -> str:
 
 
 def verify_session_token(token: str) -> dict | None:
-    """Prueft einen Session-Token und gibt die Daten zurueck."""
+    """Prüft einen Session-Token und gibt die Daten zurück."""
     try:
         return _serializer.loads(token, max_age=SESSION_MAX_AGE)
     except (BadSignature, SignatureExpired):
@@ -40,16 +40,16 @@ def verify_session_token(token: str) -> dict | None:
 
 
 def generate_password(length: int = 12) -> str:
-    """Generiert ein zufaelliges Einmal-Passwort."""
+    """Generiert ein zufälliges Einmal-Passwort."""
     alphabet = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"
     return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def is_admin_email(email: str) -> bool:
-    """Prueft ob die E-Mail die Admin-E-Mail ist."""
+    """Prüft ob die E-Mail die Admin-E-Mail ist."""
     return email.lower() == ADMIN_EMAIL.lower() and ADMIN_EMAIL != ""
 
 
 def verify_admin(username: str, password: str) -> bool:
-    """Prueft Admin-Zugangsdaten aus der .env."""
+    """Prüft Admin-Zugangsdaten aus der .env."""
     return username == ADMIN_USERNAME and password == ADMIN_PASSWORD and ADMIN_PASSWORD != ""

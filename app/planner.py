@@ -145,6 +145,7 @@ def parse_rezept(filepath):
         "tags": [],
         "zutaten": [],
         "zubereitung": [],
+        "naehrwerte": [],
         "datei": filepath.name,
     }
 
@@ -209,6 +210,28 @@ def parse_rezept(filepath):
             step = re.sub(r"^\d+\.\s*", "", line.strip())
             if step:
                 rezept["zubereitung"].append(step)
+
+    # Naehrwerte aus Markdown-Tabelle parsen
+    in_naehrwerte = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("## Naehrwerte"):
+            in_naehrwerte = True
+            continue
+        elif stripped.startswith("## "):
+            in_naehrwerte = False
+            continue
+
+        if in_naehrwerte and stripped.startswith("|"):
+            # Header-Zeilen ueberspringen
+            if "|---|" in stripped or "| Naehrwert" in stripped:
+                continue
+            cells = [c.strip() for c in stripped.split("|") if c.strip()]
+            if len(cells) >= 2:
+                rezept["naehrwerte"].append({
+                    "name": cells[0],
+                    "menge": cells[1],
+                })
 
     return rezept
 

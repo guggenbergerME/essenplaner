@@ -178,26 +178,34 @@ async def logout():
     return response
 
 
-# ── Geschuetzte Routen ───────────────────────────────
+# ── Startseite (oeffentlich) / Wochenplan (eingeloggt) ─
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    user = _require_login(request)
-    if not user:
-        return RedirectResponse("/login", status_code=303)
+    user = _get_current_user(request)
 
-    daten = _get_plan()
-    settings = lade_einstellungen()
-    return templates.TemplateResponse("index.html", {
+    # Eingeloggt: Wochenplan anzeigen
+    if user:
+        daten = _get_plan()
+        settings = lade_einstellungen()
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "user": user,
+            "is_admin": _is_admin(user),
+            "plan": daten["plan"],
+            "einkaufsliste": daten["einkaufsliste"],
+            "einkaufsliste_gruppiert": daten["einkaufsliste_gruppiert"],
+            "laeden": daten["laeden"],
+            "personen": settings.get("personen", 4),
+        })
+
+    # Nicht eingeloggt: Startseite mit Beispielplan
+    beispiel = generiere_wochenplan()
+    return templates.TemplateResponse("startseite.html", {
         "request": request,
         "dev_mode": DEV_MODE,
-        "user": user,
-        "is_admin": _is_admin(user),
-        "plan": daten["plan"],
-        "einkaufsliste": daten["einkaufsliste"],
-        "einkaufsliste_gruppiert": daten["einkaufsliste_gruppiert"],
-        "laeden": daten["laeden"],
-        "personen": settings.get("personen", 4),
+        "beispiel_plan": beispiel["plan"],
     })
 
 

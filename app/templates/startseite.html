@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}essenplaner – Dein kostenloser Wochenplaner{% endblock %}
+
+{% block nav %}
+<a href="/login">Anmelden</a>
+<a href="/registrieren">Registrieren</a>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="landing-hero">
+    <h1 class="landing-hero__title">Nie mehr ueberlegen, was es zu essen gibt.</h1>
+    <p class="landing-hero__text">Der <strong>essenplaner</strong> erstellt dir automatisch einen Wochenplan mit Rezepten, abgestimmt auf deine Arbeitszeiten – inklusive fertiger Einkaufsliste. Komplett kostenlos.</p>
+    <div class="hero__actions">
+        <a href="#registrieren" class="btn btn--primary">Kostenlos registrieren</a>
+        <a href="#so-funktionierts" class="btn btn--outline">So funktioniert's</a>
+    </div>
+</section>
+
+<!-- So funktioniert's -->
+<section id="so-funktionierts" class="landing-section">
+    <h2 class="landing-section__title">So funktioniert's</h2>
+    <div class="landing-steps">
+        <div class="landing-step">
+            <div class="landing-step__number">1</div>
+            <h3>Arbeitszeiten eintragen</h3>
+            <p>Gib an, wann du an welchem Tag arbeitest. Der Planer berechnet automatisch, wie viel Kochzeit dir bleibt.</p>
+        </div>
+        <div class="landing-step">
+            <div class="landing-step__number">2</div>
+            <h3>Plan generieren</h3>
+            <p>Per Knopfdruck erhaeltst du einen Wochenplan mit passenden Rezepten – schnelle Gerichte an langen Arbeitstagen, aufwendigere am Wochenende.</p>
+        </div>
+        <div class="landing-step">
+            <div class="landing-step__number">3</div>
+            <h3>Einkaufen & Kochen</h3>
+            <p>Die Einkaufsliste wird automatisch erstellt, nach Supermarkt-Abteilungen sortiert. Alles als PDF zum Ausdrucken.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Beispiel-Wochenplan -->
+<section class="landing-section">
+    <h2 class="landing-section__title">Beispiel: Ein typischer Wochenplan</h2>
+    <p class="landing-section__desc">Jeder Plan wird individuell generiert – hier ein Beispiel, wie er aussehen koennte.</p>
+    <div class="landing-example">
+        <div class="weekplan__grid">
+            {% for eintrag in beispiel_plan %}
+            <div class="weekplan__day">
+                <div class="weekplan__day-header">
+                    <h3 class="weekplan__day-name">{{ eintrag.tag }}</h3>
+                    <span class="weekplan__day-zeit">max. {{ eintrag.max_zeit }} Min.</span>
+                </div>
+                <div class="weekplan__meals">
+                    {% if eintrag.rezept %}
+                    <div class="weekplan__meal weekplan__meal--filled">
+                        <div class="weekplan__meal-info">
+                            <span class="weekplan__meal-name" style="cursor:default;">{{ eintrag.rezept.name }}</span>
+                            <span class="weekplan__meal-meta">{{ eintrag.rezept.zubereitungszeit }} Min. | {{ eintrag.rezept.portionen }} Port.</span>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="weekplan__meal weekplan__meal--empty">
+                        <span class="weekplan__meal-label">–</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="landing-section">
+    <h2 class="landing-section__title">Was der essenplaner kann</h2>
+    <div class="landing-features">
+        <div class="landing-feature">
+            <div class="landing-feature__icon">&#9201;</div>
+            <h3>Arbeitszeit-basiert</h3>
+            <p>Rezepte werden passend zu deiner verfuegbaren Kochzeit ausgewaehlt. Langer Arbeitstag? Dann ein 25-Minuten-Gericht.</p>
+        </div>
+        <div class="landing-feature">
+            <div class="landing-feature__icon">&#128722;</div>
+            <h3>Automatische Einkaufsliste</h3>
+            <p>Alle Zutaten der Woche, sortiert nach Supermarkt-Abteilungen. Mengen werden auf sinnvolle Einkaufsgroessen gerundet.</p>
+        </div>
+        <div class="landing-feature">
+            <div class="landing-feature__icon">&#128196;</div>
+            <h3>PDF-Export</h3>
+            <p>Wochenplan, Einkaufsliste und einzelne Rezepte als PDF herunterladen – perfekt zum Ausdrucken oder aufs Handy.</p>
+        </div>
+        <div class="landing-feature">
+            <div class="landing-feature__icon">&#11088;</div>
+            <h3>Favoriten speichern</h3>
+            <p>Den perfekten Wochenplan gefunden? Speichere ihn als Favorit und rufe ihn jederzeit wieder auf.</p>
+        </div>
+        <div class="landing-feature">
+            <div class="landing-feature__icon">&#128197;</div>
+            <h3>Monatsplan</h3>
+            <p>Gleich vier Wochen auf einmal planen – fuer alle, die vorausdenken moechten.</p>
+        </div>
+        <div class="landing-feature">
+            <div class="landing-feature__icon">&#127829;</div>
+            <h3>60+ Rezepte</h3>
+            <p>Von schnellen Pfannengerichten bis zum Sonntagsbraten – abwechslungsreich und alltagstauglich.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Registrierung -->
+<section id="registrieren" class="landing-section">
+    <h2 class="landing-section__title">Jetzt kostenlos starten</h2>
+    <p class="landing-section__desc">Der essenplaner ist und bleibt <strong>komplett kostenlos</strong>. Keine Werbung, keine versteckten Kosten. Einfach E-Mail eingeben und loslegen.</p>
+
+    <div class="auth" style="padding-top: 0;">
+        <div class="auth__card">
+            {% if fehler %}
+            <div class="auth__alert auth__alert--error">{{ fehler }}</div>
+            {% endif %}
+
+            {% if erfolg %}
+            <div class="auth__alert auth__alert--success">
+                Registrierung erfolgreich! Dein Passwort wurde an <strong>{{ email }}</strong> gesendet.
+                <br>Pruefe dein Postfach und melde dich dann an.
+            </div>
+            <a href="/login" class="btn btn--primary btn--full" style="margin-top: 1rem;">Zum Login</a>
+            {% else %}
+            <form method="POST" action="/registrieren" class="auth__form">
+                <div class="auth__field">
+                    <label for="email">Deine E-Mail-Adresse</label>
+                    <input type="email" id="email" name="email" required placeholder="deine@email.de">
+                </div>
+                <button type="submit" class="btn btn--primary btn--full">Kostenlos registrieren</button>
+            </form>
+            <p class="auth__footer-text">Du erhaeltst dein Passwort per E-Mail.</p>
+            {% endif %}
+
+            <p class="auth__footer-text" style="margin-top: 0.75rem;">
+                Schon ein Konto? <a href="/login" class="auth__link">Zum Login</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

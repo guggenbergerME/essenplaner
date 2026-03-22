@@ -950,6 +950,145 @@ body {
     line-height: 1.5;
 }
 
+/* ── Landing Page ──────────────────────────────── */
+.landing-hero {
+    text-align: center;
+    padding: 3rem 0 3.5rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.landing-hero__title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.landing-hero__text {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.landing-hero__text strong {
+    color: var(--brand-color);
+}
+
+.landing-section {
+    padding: 2.5rem 0;
+}
+
+.landing-section__title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.landing-section__desc {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 550px;
+    margin: 0 auto 2rem;
+}
+
+/* ── Steps ─────────────────────────────────────── */
+.landing-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.landing-step {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.landing-step:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.landing-step__number {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--brand-color);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.landing-step h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.landing-step p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ── Features Grid ─────────────────────────────── */
+.landing-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.landing-feature {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.landing-feature:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.landing-feature__icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.landing-feature h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.landing-feature p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ── Beispiel-Plan ─────────────────────────────── */
+.landing-example {
+    margin-top: 1rem;
+}
+
 /* ── Auth (Login / Registrieren) ───────────────── */
 .auth {
     display: flex;
@@ -1280,6 +1419,18 @@ body {
 
     .header__nav a {
         font-size: 0.8rem;
+    }
+
+    .landing-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-features {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-hero__title {
+        font-size: 2rem;
     }
 }
 

@@ -140,6 +140,7 @@ def parse_rezept(filepath):
         "name": "",
         "zubereitungszeit": 30,
         "portionen": 4,
+        "kategorie": "",
         "tags": [],
         "zutaten": [],
         "zubereitung": [],
@@ -150,6 +151,25 @@ def parse_rezept(filepath):
         if line.startswith("# "):
             rezept["name"] = line[2:].strip()
             break
+
+    # Metadaten aus Markdown-Tabelle parsen (| **Key** | Value |)
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("|") and "**" in stripped:
+            cells = [c.strip() for c in stripped.split("|") if c.strip()]
+            if len(cells) >= 2:
+                key = cells[0].replace("**", "").strip().lower()
+                val = cells[1].strip()
+                if key == "zubereitungszeit":
+                    match = re.search(r"(\d+)", val)
+                    if match:
+                        rezept["zubereitungszeit"] = int(match.group(1))
+                elif key == "portionen":
+                    match = re.search(r"(\d+)", val)
+                    if match:
+                        rezept["portionen"] = int(match.group(1))
+                elif key == "kategorie":
+                    rezept["kategorie"] = val
 
     for line in lines:
         line = line.strip()
@@ -291,6 +311,37 @@ def generiere_wochenplan():
             "max_zeit": max_min,
             "rezept": rezept,
         })
+
+    # Mindestens 1 Fischrezept pro Woche sicherstellen
+    hat_fisch = any(
+        e["rezept"] and e["rezept"].get("kategorie", "").lower() == "fisch"
+        for e in plan
+    )
+    if not hat_fisch:
+        fisch_rezepte = [
+            r for r in rezepte
+            if r.get("kategorie", "").lower() == "fisch"
+            and r["name"] not in verwendete
+        ]
+        if fisch_rezepte:
+            # Zufaelligen Tag waehlen und Fischrezept dort einsetzen
+            tausch_indices = list(range(len(plan)))
+            random.shuffle(tausch_indices)
+            for idx in tausch_indices:
+                eintrag = plan[idx]
+                passende_fische = [
+                    r for r in fisch_rezepte
+                    if r["zubereitungszeit"] <= eintrag["max_zeit"]
+                ]
+                if not passende_fische:
+                    passende_fische = fisch_rezepte
+                fisch = random.choice(passende_fische)
+                # Altes Rezept aus verwendete entfernen
+                if eintrag["rezept"]:
+                    verwendete.discard(eintrag["rezept"]["name"])
+                verwendete.add(fisch["name"])
+                eintrag["rezept"] = skaliere_rezept(fisch, personen)
+                break
 
     # Einkaufsliste nach Abteilungen gruppiert
     einkaufsliste_raw = {}

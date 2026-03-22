@@ -1,5 +1,6 @@
 """Wochenplan-Logik: Rezepte einlesen, Plan generieren, Einkaufsliste erstellen."""
 
+import math
 import os
 import re
 import random
@@ -238,6 +239,38 @@ def _skaliere_menge(text, faktor):
     return re.sub(r"\d+[.,]?\d*", ersetze, text, count=1)
 
 
+def _runde_einkaufsmenge(text):
+    """Rundet Mengenangaben auf ganze Einkaufsmengen auf.
+
+    - Stueckzahlen (Zwiebeln, Dosen, Eier, ...): auf ganze Zahl aufrunden
+    - g/ml: auf naechste 50er-Stufe aufrunden
+    - kg/l: auf naechste 0,5er-Stufe aufrunden
+    """
+    # Erste Zahl im String finden, optional gefolgt von Einheit
+    match = re.match(r"^(\d+[.,]?\d*)\s*(g|kg|ml|l)?\b(.*)", text, re.IGNORECASE)
+    if not match:
+        return text
+
+    zahl = float(match.group(1).replace(",", "."))
+    einheit = (match.group(2) or "").lower()
+    rest = (match.group(2) or "") + match.group(3)
+
+    if einheit in ("g", "ml"):
+        # Auf naechste 50er-Stufe aufrunden
+        gerundet = math.ceil(zahl / 50) * 50
+        return f"{gerundet} {rest}".strip()
+    elif einheit in ("kg", "l"):
+        # Auf naechste 0,5er-Stufe aufrunden
+        gerundet = math.ceil(zahl * 2) / 2
+        if gerundet == int(gerundet):
+            return f"{int(gerundet)} {rest}".strip()
+        return f"{gerundet:.1f}".replace(".", ",") + f" {rest}".strip()
+    else:
+        # Stueckzahl: auf ganze Zahl aufrunden
+        gerundet = math.ceil(zahl)
+        return f"{gerundet} {rest}".strip() if rest.strip() else str(gerundet)
+
+
 def skaliere_rezept(rezept, personen):
     """Gibt eine Kopie des Rezepts mit skalierten Zutaten zurueck."""
     original_portionen = rezept.get("portionen", 4)
@@ -343,14 +376,15 @@ def generiere_wochenplan():
                 eintrag["rezept"] = skaliere_rezept(fisch, personen)
                 break
 
-    # Einkaufsliste nach Abteilungen gruppiert
+    # Einkaufsliste nach Abteilungen gruppiert (Mengen auf ganze Produkte gerundet)
     einkaufsliste_raw = {}
     for eintrag in plan:
         if eintrag["rezept"]:
             for zutat in eintrag["rezept"]["zutaten"]:
-                if zutat not in einkaufsliste_raw:
-                    einkaufsliste_raw[zutat] = []
-                einkaufsliste_raw[zutat].append(eintrag["tag"])
+                zutat_gerundet = _runde_einkaufsmenge(zutat)
+                if zutat_gerundet not in einkaufsliste_raw:
+                    einkaufsliste_raw[zutat_gerundet] = []
+                einkaufsliste_raw[zutat_gerundet].append(eintrag["tag"])
 
     # Nach Abteilungen sortieren
     abteilungen = {}

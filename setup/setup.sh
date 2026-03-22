@@ -87,11 +87,21 @@ prompt_required ADMIN_EMAIL_INPUT "Admin-E-Mail"
 ADMIN_PASSWORD=$(openssl rand -base64 16 | tr -d '/+=\n' | head -c 16)
 
 echo ""
+info "E-Mail-Einstellungen (SMTP) fuer Registrierungs-Mails:"
+prompt_value SMTP_HOST_INPUT   "SMTP-Server"          ""
+prompt_value SMTP_PORT_INPUT   "SMTP-Port"             "587"
+prompt_value SMTP_USER_INPUT   "SMTP-Benutzername"     ""
+prompt_secret SMTP_PASS_INPUT  "SMTP-Passwort"
+prompt_value SMTP_FROM_INPUT   "Absender-E-Mail"       "${ADMIN_EMAIL_INPUT}"
+prompt_value SMTP_TLS_INPUT    "STARTTLS verwenden (true/false)" "true"
+
+echo ""
 info "Zusammenfassung:"
 echo "  Server-IP : ${SERVER_IP}"
 echo "  Port      : ${SERVER_PORT}"
 echo "  URL       : ${APP_URL}"
 echo "  Admin     : ${ADMIN_USERNAME}"
+echo "  SMTP      : ${SMTP_HOST_INPUT}:${SMTP_PORT_INPUT}"
 echo ""
 read -rp "Weiter? (j/n) [j]: " CONFIRM
 CONFIRM="${CONFIRM:-j}"
@@ -188,6 +198,14 @@ SECRET_KEY=${SECRET_KEY}
 ADMIN_USERNAME=${ADMIN_USERNAME}
 ADMIN_PASSWORD=${ADMIN_PASSWORD}
 ADMIN_EMAIL=${ADMIN_EMAIL_INPUT}
+
+## ===== E-Mail (SMTP) =====
+SMTP_HOST=${SMTP_HOST_INPUT}
+SMTP_PORT=${SMTP_PORT_INPUT}
+SMTP_USER=${SMTP_USER_INPUT}
+SMTP_PASSWORD=${SMTP_PASS_INPUT}
+SMTP_FROM=${SMTP_FROM_INPUT}
+SMTP_TLS=${SMTP_TLS_INPUT}
 
 ENV
 

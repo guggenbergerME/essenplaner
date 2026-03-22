@@ -5,17 +5,40 @@
 {% block nav %}
 <a href="/" class="header__nav-active">Wochenplan</a>
 <a href="/einstellungen">Einstellungen</a>
+<a href="/favoriten">Favoriten</a>
+<a href="/monatsplan">Monatsplan</a>
+{% if is_admin %}<a href="/admin">Admin</a>{% endif %}
 {% endblock %}
 
 {% block content %}
 <section class="hero">
-    <h1>Wochenplaner</h1>
+    <h1>{% if favorit_name is defined and favorit_name %}{{ favorit_name }}{% else %}Wochenplaner{% endif %}</h1>
     <p class="hero__subtitle">Mahlzeiten fuer {{ personen }} Personen mit automatischer Einkaufsliste.</p>
     <div class="hero__actions">
         <a href="/api/neu" class="btn btn--primary">Neuen Plan generieren</a>
         <a href="/api/wochenplan.pdf" class="btn btn--outline">Komplett-PDF</a>
+        {% if favorit_name is not defined or not favorit_name %}
+        <button class="btn btn--outline" onclick="document.getElementById('favModal').style.display='flex'">Als Favorit speichern</button>
+        {% endif %}
     </div>
 </section>
+
+<!-- Favorit-Speichern Modal -->
+<div id="favModal" class="bug-modal" style="display:none;">
+    <div class="bug-modal__content">
+        <div class="bug-modal__header">
+            <h3>Wochenplan speichern</h3>
+            <button class="bug-modal__close" onclick="document.getElementById('favModal').style.display='none'">&times;</button>
+        </div>
+        <form method="POST" action="/api/favorit/speichern">
+            <div class="bug-modal__field">
+                <label for="fav-name">Name</label>
+                <input type="text" id="fav-name" name="name" placeholder="z.B. Lieblingswoche" value="Wochenplan vom {{ now().strftime('%d.%m.%Y') if now is defined else '' }}">
+            </div>
+            <button type="submit" class="btn btn--primary btn--full">Speichern</button>
+        </form>
+    </div>
+</div>
 
 <!-- Wochenplan -->
 <section class="weekplan">

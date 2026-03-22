@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Passwort aendern – essenplaner{% endblock %}
+
+{% block nav %}
+<a href="/">Wochenplan</a>
+<a href="/einstellungen">Einstellungen</a>
+<a href="/favoriten">Favoriten</a>
+{% if is_admin %}<a href="/admin">Admin</a>{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="settings">
+    <h1 class="settings__title">Passwort aendern</h1>
+
+    {% if fehler %}
+    <div class="auth__alert auth__alert--error">{{ fehler }}</div>
+    {% endif %}
+
+    {% if erfolg %}
+    <div class="settings__alert">Passwort wurde erfolgreich geaendert!</div>
+    {% endif %}
+
+    <form method="POST" action="/passwort-aendern" class="settings__form">
+        <div class="settings__section">
+            <div class="auth__field">
+                <label for="altes_passwort">Aktuelles Passwort</label>
+                <input type="password" id="altes_passwort" name="altes_passwort" required>
+            </div>
+            <div class="auth__field">
+                <label for="neues_passwort">Neues Passwort</label>
+                <input type="password" id="neues_passwort" name="neues_passwort" required minlength="8" placeholder="Min. 8 Zeichen">
+            </div>
+            <div class="auth__field">
+                <label for="neues_passwort2">Neues Passwort wiederholen</label>
+                <input type="password" id="neues_passwort2" name="neues_passwort2" required minlength="8">
+            </div>
+        </div>
+        <button type="submit" class="btn btn--primary">Passwort aendern</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Monatsplan – essenplaner{% endblock %}
+
+{% block nav %}
+<a href="/">Wochenplan</a>
+<a href="/einstellungen">Einstellungen</a>
+<a href="/favoriten">Favoriten</a>
+{% if is_admin %}<a href="/admin">Admin</a>{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Monatsplan</h1>
+    <p class="hero__subtitle">Vier Wochen auf einen Blick – automatisch generiert.</p>
+    <div class="hero__actions">
+        <form method="POST" action="/monatsplan" style="display: inline;">
+            <button type="submit" class="btn btn--primary">Neuen Monatsplan generieren</button>
+        </form>
+        {% if wochen %}
+        <a href="/api/monatsplan.pdf" class="btn btn--outline">Monatsplan-PDF</a>
+        {% endif %}
+    </div>
+</section>
+
+{% if wochen %}
+{% for woche in wochen %}
+<section class="weekplan" style="margin-bottom: 2rem;">
+    <h2 style="margin-bottom: 0.75rem; color: var(--brand-color);">Woche {{ woche.nummer }}</h2>
+    <div class="weekplan__grid">
+        {% for eintrag in woche.plan %}
+        <div class="weekplan__day">
+            <div class="weekplan__day-header">
+                <h3 class="weekplan__day-name">{{ eintrag.tag }}</h3>
+                <span class="weekplan__day-zeit">max. {{ eintrag.max_zeit }} Min.</span>
+            </div>
+            <div class="weekplan__meals">
+                {% if eintrag.rezept %}
+                <div class="weekplan__meal weekplan__meal--filled">
+                    <div class="weekplan__meal-info">
+                        <a href="/rezept/{{ eintrag.rezept.datei }}" class="weekplan__meal-name">{{ eintrag.rezept.name }}</a>
+                        <span class="weekplan__meal-meta">{{ eintrag.rezept.zubereitungszeit }} Min.</span>
+                    </div>
+                </div>
+                {% else %}
+                <div class="weekplan__meal weekplan__meal--empty">
+                    <span class="weekplan__meal-label">–</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endfor %}
+{% else %}
+<section class="settings__section" style="text-align: center; padding: 3rem; margin-top: 1rem;">
+    <p style="color: var(--text-muted);">Klicke auf "Neuen Monatsplan generieren" um vier Wochen zu planen.</p>
+</section>
+{% endif %}
+{% endblock %}

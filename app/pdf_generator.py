@@ -202,3 +202,45 @@ def wochenplan_pdf(plan, einkaufsliste_gruppiert, laeden, personen):
     pdf.output(buf)
     buf.seek(0)
     return buf.getvalue()
+
+
+def monatsplan_pdf(wochen, personen):
+    """Erzeugt ein Komplett-PDF fuer einen Monatsplan (4 Wochen)."""
+    pdf = SWPdf()
+    pdf.title = "Monatsplan"
+    pdf.add_page()
+
+    pdf.set_font("Helvetica", "I", 10)
+    pdf.cell(0, 6, f"Fuer {personen} Personen – 4 Wochen", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(3)
+
+    for woche in wochen:
+        pdf.set_font("Helvetica", "B", 12)
+        pdf.cell(0, 8, f"Woche {woche['nummer']}", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(2)
+
+        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_fill_color(200, 200, 200)
+        pdf.cell(45, 7, "Tag", border=1, fill=True)
+        pdf.cell(100, 7, "Rezept", border=1, fill=True)
+        pdf.cell(45, 7, "Zeit", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+
+        pdf.set_font("Helvetica", "", 9)
+        for i, eintrag in enumerate(woche["plan"]):
+            bg = 245 if i % 2 == 0 else 255
+            pdf.set_fill_color(bg, bg, bg)
+            name = eintrag["rezept"]["name"] if eintrag["rezept"] else "—"
+            zeit = f"{eintrag['rezept']['zubereitungszeit']} Min." if eintrag["rezept"] else "—"
+            pdf.cell(45, 6, eintrag["tag"], border=1, fill=True)
+            pdf.cell(100, 6, name, border=1, fill=True)
+            pdf.cell(45, 6, zeit, border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+
+        pdf.ln(4)
+
+        if pdf.get_y() > 230 and woche["nummer"] < 4:
+            pdf.add_page()
+
+    buf = io.BytesIO()
+    pdf.output(buf)
+    buf.seek(0)
+    return buf.getvalue()

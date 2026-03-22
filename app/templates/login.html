@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Login – essenplaner{% endblock %}
+
+{% block content %}
+<section class="auth">
+    <div class="auth__card">
+        <h1 class="auth__title">Anmelden</h1>
+        <p class="auth__subtitle">Melde dich mit deiner E-Mail und deinem Passwort an.</p>
+
+        {% if fehler %}
+        <div class="auth__alert auth__alert--error">{{ fehler }}</div>
+        {% endif %}
+
+        <form method="POST" action="/login" class="auth__form">
+            <div class="auth__field">
+                <label for="email">E-Mail</label>
+                <input type="email" id="email" name="email" required autofocus placeholder="deine@email.de">
+            </div>
+            <div class="auth__field">
+                <label for="password">Passwort</label>
+                <input type="password" id="password" name="password" required placeholder="Dein Passwort">
+            </div>
+            <button type="submit" class="btn btn--primary btn--full">Anmelden</button>
+        </form>
+
+        <p class="auth__footer-text">
+            Noch kein Konto? <a href="/registrieren" class="auth__link">Jetzt registrieren</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

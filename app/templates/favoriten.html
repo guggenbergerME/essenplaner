@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Favoriten – essenplaner{% endblock %}
+
+{% block nav %}
+<a href="/">Wochenplan</a>
+<a href="/einstellungen">Einstellungen</a>
+<a href="/favoriten" class="header__nav-active">Favoriten</a>
+{% if is_admin %}<a href="/admin">Admin</a>{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="settings">
+    <h1 class="settings__title">Gespeicherte Wochenplaene</h1>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Deine als Favorit gespeicherten Wochenplaene.</p>
+
+    {% if favoriten %}
+    <div class="favoriten__grid">
+        {% for fav in favoriten %}
+        <div class="favoriten__card">
+            <div class="favoriten__info">
+                <h3 class="favoriten__name">{{ fav.name }}</h3>
+                <span class="favoriten__date">{{ fav.created_at[:10] if fav.created_at else "" }}</span>
+            </div>
+            <div class="favoriten__actions">
+                <a href="/favorit/{{ fav.id }}" class="btn btn--primary btn--small">Anzeigen</a>
+                <form method="POST" action="/favorit/{{ fav.id }}/loeschen" style="display:inline;">
+                    <button type="submit" class="btn btn--danger btn--small" onclick="return confirm('Favorit loeschen?');">Loeschen</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="settings__section" style="text-align: center; padding: 3rem;">
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">Du hast noch keine Favoriten gespeichert.</p>
+        <a href="/" class="btn btn--primary">Zum Wochenplan</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

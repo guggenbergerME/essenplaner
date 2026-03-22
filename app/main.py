@@ -5,17 +5,28 @@ from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import HTMLResponse, Response, RedirectResponse
 
 from app.planner import generiere_wochenplan, lade_alle_rezepte, parse_nichtverwenden, filter_rezepte, skaliere_rezept
 from app.pdf_generator import einkaufsliste_pdf, rezept_pdf, wochenplan_pdf
 from app.settings import lade_einstellungen, speichere_einstellungen, TAGE_KURZ, TAGE_LANG
+from app.database import (
+    init_db, create_user, get_user_by_email, get_user_by_id,
+    get_all_users, delete_user, update_user_password,
+    save_favorit, get_favoriten, get_favorit, delete_favorit,
+)
+from app.auth import (
+    hash_password, verify_password, generate_password,
+    create_session_token, verify_session_token,
+    is_admin_email, verify_admin, SESSION_COOKIE,
+)
+from app.email_service import send_password_email
 
 # ── App ──────────────────────────────────────────────
 app = FastAPI(
     title="essenplaner",
-    description="Wochenplaner für Mahlzeiten mit Einkaufsliste",
-    version="1.0.0",
+    description="Wochenplaner fuer Mahlzeiten mit Einkaufsliste",
+    version="2.0.0",
 )
 
 # ── Static & Templates ───────────────────────────────
@@ -25,6 +36,9 @@ templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # ── DEV_MODE (Bug-Melde-Modus) ───────────────────────
 DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
+
+# ── Datenbank initialisieren ─────────────────────────
+init_db()
 
 # ── Aktuellen Plan im Speicher halten ────────────────
 _aktueller_plan = None
@@ -37,14 +51,148 @@ def _get_plan(neu=False):
     return _aktueller_plan
 
 
-# ── Routes ───────────────────────────────────────────
+# ── Auth-Hilfsfunktionen ────────────────────────────
+
+def _get_current_user(request: Request):
+    """Gibt den aktuellen Nutzer zurueck oder None."""
+    token = request.cookies.get(SESSION_COOKIE)
+    if not token:
+        return None
+    data = verify_session_token(token)
+    if not data:
+        return None
+    return get_user_by_id(data["user_id"])
+
+
+def _require_login(request: Request):
+    """Gibt den Nutzer zurueck oder None (fuer Redirect)."""
+    return _get_current_user(request)
+
+
+def _is_admin(user):
+    """Prueft ob ein Nutzer der Admin ist."""
+    return user and is_admin_email(user["email"])
+
+
+# ── Oeffentliche Routen ──────────────────────────────
+
+@app.get("/login", response_class=HTMLResponse)
+async def login_seite(request: Request):
+    user = _get_current_user(request)
+    if user:
+        return RedirectResponse("/", status_code=303)
+    return templates.TemplateResponse("login.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+    })
+
+
+@app.post("/login", response_class=HTMLResponse)
+async def login(request: Request):
+    form = await request.form()
+    email = form.get("email", "").strip().lower()
+    password = form.get("password", "")
+
+    user = get_user_by_email(email)
+    if not user or not verify_password(password, user["password_hash"]):
+        return templates.TemplateResponse("login.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "E-Mail oder Passwort falsch.",
+        })
+
+    if not user["is_active"]:
+        return templates.TemplateResponse("login.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "Dein Konto wurde deaktiviert.",
+        })
+
+    token = create_session_token(user["id"])
+    response = RedirectResponse("/", status_code=303)
+    response.set_cookie(
+        SESSION_COOKIE, token,
+        max_age=60 * 60 * 24 * 30,
+        httponly=True, samesite="lax",
+    )
+    return response
+
+
+@app.get("/registrieren", response_class=HTMLResponse)
+async def registrieren_seite(request: Request):
+    user = _get_current_user(request)
+    if user:
+        return RedirectResponse("/", status_code=303)
+    return templates.TemplateResponse("registrieren.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+    })
+
+
+@app.post("/registrieren", response_class=HTMLResponse)
+async def registrieren(request: Request):
+    form = await request.form()
+    email = form.get("email", "").strip().lower()
+
+    if not email or "@" not in email:
+        return templates.TemplateResponse("registrieren.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "Bitte gib eine gueltige E-Mail-Adresse ein.",
+        })
+
+    # Pruefen ob E-Mail schon registriert
+    existing = get_user_by_email(email)
+    if existing:
+        return templates.TemplateResponse("registrieren.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "Diese E-Mail ist bereits registriert.",
+        })
+
+    # Einmal-Passwort generieren und senden
+    password = generate_password()
+    pw_hash = hash_password(password)
+
+    if not create_user(email, pw_hash):
+        return templates.TemplateResponse("registrieren.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
+        })
+
+    send_password_email(email, password)
+
+    return templates.TemplateResponse("registrieren.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "erfolg": True,
+        "email": email,
+    })
+
+
+@app.get("/logout")
+async def logout():
+    response = RedirectResponse("/login", status_code=303)
+    response.delete_cookie(SESSION_COOKIE)
+    return response
+
+
+# ── Geschuetzte Routen ───────────────────────────────
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     daten = _get_plan()
     settings = lade_einstellungen()
     return templates.TemplateResponse("index.html", {
         "request": request,
         "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
         "plan": daten["plan"],
         "einkaufsliste": daten["einkaufsliste"],
         "einkaufsliste_gruppiert": daten["einkaufsliste_gruppiert"],
@@ -55,11 +203,17 @@ async def index(request: Request):
 
 @app.get("/api/neu", response_class=HTMLResponse)
 async def neuer_plan(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     daten = _get_plan(neu=True)
     settings = lade_einstellungen()
     return templates.TemplateResponse("index.html", {
         "request": request,
         "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
         "plan": daten["plan"],
         "einkaufsliste": daten["einkaufsliste"],
         "einkaufsliste_gruppiert": daten["einkaufsliste_gruppiert"],
@@ -70,7 +224,11 @@ async def neuer_plan(request: Request):
 
 # ── Wochenplan Komplett-PDF ────────────────────────
 @app.get("/api/wochenplan.pdf")
-async def wochenplan_download():
+async def wochenplan_download(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     daten = _get_plan()
     settings = lade_einstellungen()
     personen = settings.get("personen", 4)
@@ -84,7 +242,11 @@ async def wochenplan_download():
 
 # ── Einkaufsliste PDF ───────────────────────────────
 @app.get("/api/einkaufsliste.pdf")
-async def einkaufsliste_download():
+async def einkaufsliste_download(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     daten = _get_plan()
     pdf_bytes = einkaufsliste_pdf(daten["einkaufsliste_gruppiert"], daten["laeden"])
     return Response(
@@ -97,6 +259,10 @@ async def einkaufsliste_download():
 # ── Rezept-Detailseite ──────────────────────────────
 @app.get("/rezept/{dateiname}", response_class=HTMLResponse)
 async def rezept_detail(request: Request, dateiname: str):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     alle = lade_alle_rezepte()
     ausschluss = parse_nichtverwenden()
     rezepte = filter_rezepte(alle, ausschluss)
@@ -123,13 +289,19 @@ async def rezept_detail(request: Request, dateiname: str):
     return templates.TemplateResponse("rezept.html", {
         "request": request,
         "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
         "rezept": rezept,
     })
 
 
 # ── Rezept PDF ──────────────────────────────────────
 @app.get("/api/rezept/{dateiname}/pdf")
-async def rezept_pdf_download(dateiname: str):
+async def rezept_pdf_download(request: Request, dateiname: str):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     alle = lade_alle_rezepte()
     rezept = None
     for r in alle:
@@ -156,10 +328,16 @@ async def rezept_pdf_download(dateiname: str):
 # ── Einstellungen ────────────────────────────────
 @app.get("/einstellungen", response_class=HTMLResponse)
 async def einstellungen_seite(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     settings = lade_einstellungen()
     return templates.TemplateResponse("einstellungen.html", {
         "request": request,
         "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
         "settings": settings,
         "tage_kurz": TAGE_KURZ,
         "tage_lang": TAGE_LANG,
@@ -168,6 +346,10 @@ async def einstellungen_seite(request: Request):
 
 @app.post("/einstellungen", response_class=HTMLResponse)
 async def einstellungen_speichern(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
     form = await request.form()
     settings = lade_einstellungen()
 
@@ -187,12 +369,246 @@ async def einstellungen_speichern(request: Request):
     return templates.TemplateResponse("einstellungen.html", {
         "request": request,
         "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
         "settings": settings,
         "tage_kurz": TAGE_KURZ,
         "tage_lang": TAGE_LANG,
         "gespeichert": True,
     })
 
+
+# ── Passwort aendern ─────────────────────────────
+
+@app.get("/passwort-aendern", response_class=HTMLResponse)
+async def passwort_aendern_seite(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    return templates.TemplateResponse("passwort_aendern.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+    })
+
+
+@app.post("/passwort-aendern", response_class=HTMLResponse)
+async def passwort_aendern(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    form = await request.form()
+    altes_pw = form.get("altes_passwort", "")
+    neues_pw = form.get("neues_passwort", "")
+    neues_pw2 = form.get("neues_passwort2", "")
+
+    ctx = {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+    }
+
+    if not verify_password(altes_pw, user["password_hash"]):
+        ctx["fehler"] = "Das aktuelle Passwort ist falsch."
+        return templates.TemplateResponse("passwort_aendern.html", ctx)
+
+    if len(neues_pw) < 8:
+        ctx["fehler"] = "Das neue Passwort muss mindestens 8 Zeichen lang sein."
+        return templates.TemplateResponse("passwort_aendern.html", ctx)
+
+    if neues_pw != neues_pw2:
+        ctx["fehler"] = "Die neuen Passwoerter stimmen nicht ueberein."
+        return templates.TemplateResponse("passwort_aendern.html", ctx)
+
+    update_user_password(user["id"], hash_password(neues_pw))
+    ctx["erfolg"] = True
+    return templates.TemplateResponse("passwort_aendern.html", ctx)
+
+
+# ── Favoriten ────────────────────────────────────
+
+@app.post("/api/favorit/speichern")
+async def favorit_speichern(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    form = await request.form()
+    name = form.get("name", "").strip()
+    if not name:
+        name = f"Wochenplan vom {datetime.now().strftime('%d.%m.%Y')}"
+
+    daten = _get_plan()
+    # Plan-Daten serialisierbar machen
+    plan_data = {
+        "plan": daten["plan"],
+        "einkaufsliste": daten["einkaufsliste"],
+        "einkaufsliste_gruppiert": daten["einkaufsliste_gruppiert"],
+        "laeden": daten["laeden"],
+    }
+    save_favorit(user["id"], name, plan_data)
+    return RedirectResponse("/favoriten", status_code=303)
+
+
+@app.get("/favoriten", response_class=HTMLResponse)
+async def favoriten_seite(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    favs = get_favoriten(user["id"])
+    return templates.TemplateResponse("favoriten.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+        "favoriten": favs,
+    })
+
+
+@app.get("/favorit/{favorit_id}", response_class=HTMLResponse)
+async def favorit_anzeigen(request: Request, favorit_id: int):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    fav = get_favorit(favorit_id, user["id"])
+    if not fav:
+        return RedirectResponse("/favoriten", status_code=303)
+
+    settings = lade_einstellungen()
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+        "plan": fav["plan_data"]["plan"],
+        "einkaufsliste": fav["plan_data"]["einkaufsliste"],
+        "einkaufsliste_gruppiert": fav["plan_data"]["einkaufsliste_gruppiert"],
+        "laeden": fav["plan_data"]["laeden"],
+        "personen": settings.get("personen", 4),
+        "favorit_name": fav["name"],
+    })
+
+
+@app.post("/favorit/{favorit_id}/loeschen")
+async def favorit_loeschen(request: Request, favorit_id: int):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    delete_favorit(favorit_id, user["id"])
+    return RedirectResponse("/favoriten", status_code=303)
+
+
+# ── Monatsplan ────────────────────────────────────
+
+@app.get("/monatsplan", response_class=HTMLResponse)
+async def monatsplan_seite(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    return templates.TemplateResponse("monatsplan.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+        "wochen": None,
+    })
+
+
+@app.post("/monatsplan", response_class=HTMLResponse)
+async def monatsplan_generieren(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    wochen = []
+    for i in range(4):
+        plan = generiere_wochenplan()
+        wochen.append({
+            "nummer": i + 1,
+            "plan": plan["plan"],
+            "einkaufsliste_gruppiert": plan["einkaufsliste_gruppiert"],
+            "laeden": plan["laeden"],
+        })
+
+    settings = lade_einstellungen()
+    return templates.TemplateResponse("monatsplan.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+        "wochen": wochen,
+        "personen": settings.get("personen", 4),
+    })
+
+
+@app.get("/api/monatsplan.pdf")
+async def monatsplan_pdf_download(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+
+    from app.pdf_generator import monatsplan_pdf
+    wochen = []
+    for i in range(4):
+        plan = generiere_wochenplan()
+        wochen.append({
+            "nummer": i + 1,
+            "plan": plan["plan"],
+            "einkaufsliste_gruppiert": plan["einkaufsliste_gruppiert"],
+            "laeden": plan["laeden"],
+        })
+
+    settings = lade_einstellungen()
+    personen = settings.get("personen", 4)
+    pdf_bytes = monatsplan_pdf(wochen, personen)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=monatsplan.pdf"},
+    )
+
+
+# ── Admin-Bereich ────────────────────────────────
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_seite(request: Request):
+    user = _require_login(request)
+    if not user or not _is_admin(user):
+        return RedirectResponse("/", status_code=303)
+
+    users = get_all_users()
+    return templates.TemplateResponse("admin.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": True,
+        "users": users,
+    })
+
+
+@app.post("/admin/user/{user_id}/loeschen")
+async def admin_user_loeschen(request: Request, user_id: int):
+    user = _require_login(request)
+    if not user or not _is_admin(user):
+        return RedirectResponse("/", status_code=303)
+
+    # Admin kann sich nicht selbst loeschen
+    if user_id == user["id"]:
+        return RedirectResponse("/admin", status_code=303)
+
+    delete_user(user_id)
+    return RedirectResponse("/admin", status_code=303)
+
+
+# ── Health ────────────────────────────────────────
 
 @app.get("/health")
 async def health():

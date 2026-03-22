@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}essenplaner{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}?v=5">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}?v=6">
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -14,6 +14,18 @@
             <a href="/" class="header__logo">essenplaner</a>
             <nav class="header__nav">
                 {% block nav %}{% endblock %}
+                {% if user is defined and user %}
+                <div class="header__user-menu">
+                    <button class="header__user-btn" onclick="toggleUserMenu()" title="{{ user.email }}">
+                        {{ user.email[0] | upper }}
+                    </button>
+                    <div id="userMenu" class="header__dropdown" style="display:none;">
+                        <span class="header__dropdown-email">{{ user.email }}</span>
+                        <a href="/passwort-aendern" class="header__dropdown-item">Passwort aendern</a>
+                        <a href="/logout" class="header__dropdown-item header__dropdown-item--logout">Abmelden</a>
+                    </div>
+                </div>
+                {% endif %}
                 <button class="theme-toggle" onclick="toggleTheme()" title="Tag/Nacht-Modus umschalten">
                     <span class="theme-toggle__icon theme-toggle__icon--light">&#9788;</span>
                     <span class="theme-toggle__icon theme-toggle__icon--dark">&#9790;</span>
@@ -46,6 +58,22 @@
         html.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
     }
+
+    function toggleUserMenu() {
+        const menu = document.getElementById('userMenu');
+        if (menu) {
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+
+    // Klick ausserhalb schliesst Dropdown
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('userMenu');
+        const btn = document.querySelector('.header__user-btn');
+        if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.style.display = 'none';
+        }
+    });
 
     // Gespeichertes Theme laden
     (function() {

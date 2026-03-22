@@ -2,6 +2,13 @@
 
 {% block title %}{{ rezept.name }} – essenplaner{% endblock %}
 
+{% block nav %}
+<a href="/">Wochenplan</a>
+<a href="/einstellungen">Einstellungen</a>
+<a href="/favoriten">Favoriten</a>
+{% if is_admin %}<a href="/admin">Admin</a>{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="rezept-detail">
     <div class="rezept-detail__header">

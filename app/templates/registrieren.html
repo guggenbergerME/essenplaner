@@ -20,6 +20,11 @@
         <a href="/login" class="btn btn--primary btn--full" style="margin-top: 1rem;">Zum Login</a>
         {% else %}
         <form method="POST" action="/registrieren" class="auth__form">
+            <!-- Honeypot: von Bots ausgefüllt, von Menschen ignoriert -->
+            <div style="display:none" aria-hidden="true">
+                <label for="website">Website</label>
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
             <div class="auth__field">
                 <label for="email">E-Mail</label>
                 <input type="email" id="email" name="email" required autofocus placeholder="deine@email.de">

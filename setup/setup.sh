@@ -88,11 +88,11 @@ ADMIN_PASSWORD=$(openssl rand -base64 16 | tr -d '/+=\n' | head -c 16)
 
 echo ""
 info "E-Mail-Einstellungen (SMTP) fuer Registrierungs-Mails:"
-prompt_value SMTP_HOST_INPUT   "SMTP-Server"          ""
+prompt_value SMTP_HOST_INPUT   "SMTP-Server"          "mail.guggbyte.com"
 prompt_value SMTP_PORT_INPUT   "SMTP-Port"             "587"
-prompt_value SMTP_USER_INPUT   "SMTP-Benutzername"     ""
+prompt_value SMTP_USER_INPUT   "SMTP-Benutzername"     "essenplaner@guggbyte.com"
 prompt_secret SMTP_PASS_INPUT  "SMTP-Passwort"
-prompt_value SMTP_FROM_INPUT   "Absender-E-Mail"       "${ADMIN_EMAIL_INPUT}"
+prompt_value SMTP_FROM_INPUT   "Absender-E-Mail"       "essenplaner@guggbyte.com"
 prompt_value SMTP_TLS_INPUT    "STARTTLS verwenden (true/false)" "true"
 
 echo ""

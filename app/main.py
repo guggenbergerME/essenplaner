@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import urllib.parse
 from datetime import datetime
 from fastapi import FastAPI, Request
@@ -36,6 +37,25 @@ templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # ── DEV_MODE (Bug-Melde-Modus) ───────────────────────
 DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
+
+# ── Rate-Limiting für Registrierung ──────────────────
+# {ip: [timestamp, ...]}
+_reg_attempts: dict[str, list[float]] = {}
+_REG_MAX = 5       # max. Versuche
+_REG_WINDOW = 3600 # Zeitfenster in Sekunden (1h)
+
+
+def _check_rate_limit(ip: str) -> bool:
+    """True = erlaubt, False = gesperrt."""
+    now = time.time()
+    attempts = _reg_attempts.get(ip, [])
+    attempts = [t for t in attempts if now - t < _REG_WINDOW]
+    if len(attempts) >= _REG_MAX:
+        _reg_attempts[ip] = attempts
+        return False
+    attempts.append(now)
+    _reg_attempts[ip] = attempts
+    return True
 
 # ── Datenbank initialisieren ─────────────────────────
 init_db()
@@ -132,6 +152,26 @@ async def registrieren_seite(request: Request):
 @app.post("/registrieren", response_class=HTMLResponse)
 async def registrieren(request: Request):
     form = await request.form()
+
+    # ── Honeypot: verstecktes Feld muss leer bleiben ──
+    if form.get("website", ""):
+        # Bot erkannt – Erfolg vortäuschen ohne etwas zu tun
+        return templates.TemplateResponse("registrieren.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "erfolg": True,
+            "email": form.get("email", ""),
+        })
+
+    # ── Rate-Limiting pro IP ──────────────────────────
+    client_ip = request.client.host if request.client else "unknown"
+    if not _check_rate_limit(client_ip):
+        return templates.TemplateResponse("registrieren.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "Zu viele Registrierungsversuche. Bitte versuche es später erneut.",
+        })
+
     email = form.get("email", "").strip().lower()
 
     if not email or "@" not in email:

@@ -35,7 +35,7 @@ class SWPdf(FPDF):
     def footer(self):
         self.set_y(-15)
         self.set_font("Helvetica", "I", 8)
-        self.cell(0, 10, f"essenplaner | Seite {self.page_no()}", align="C")
+        self.cell(0, 10, f"essenplaner | Seite {self.page_no()} | Wird bereitgestellt von www.guggbyte.com", align="C")
 
     def cell(self, w=0, h=0, txt="", **kwargs):
         return super().cell(w, h, _norm(txt), **kwargs)

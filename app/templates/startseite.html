@@ -10,101 +10,130 @@
 {% block content %}
 
 <!-- guggbyte.com Banner -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
-.guggbyte-banner {
-    margin: 0 0 1.5rem 0;
-    border-radius: 12px;
-    overflow: hidden;
-    animation: gbFadeIn 0.8s ease both;
-}
-.guggbyte-banner__link {
-    display: flex;
-    align-items: center;
-    height: 80px;
-    text-decoration: none;
-    background: linear-gradient(135deg, #0A2463 0%, #1a3a7c 50%, #0A2463 100%);
-    background-size: 200% 200%;
-    animation: gbGradient 4s ease infinite;
-    padding: 0 1.75rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.guggbyte-banner__link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(10,36,99,0.35);
-}
-.guggbyte-banner__inner {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
+.gb-banner {
     width: 100%;
-}
-.guggbyte-banner__logo-wrap {
+    height: 80px;
+    background: linear-gradient(95deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    border: 2px solid #22d3ee;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 30px rgba(34,211,238,0.5);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    padding: 0 20px;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+.gb-banner__logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #67e8f9;
+    letter-spacing: -1px;
+    animation: gbGlow 2.5s ease-in-out infinite alternate;
+    white-space: nowrap;
     flex-shrink: 0;
 }
-.guggbyte-banner__dot {
+.gb-banner__dot {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
+    background: #67e8f9;
     border-radius: 50%;
-    background: #4fc3f7;
-    animation: gbPulse 2s ease-in-out infinite;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: gbBlink 1.4s infinite;
 }
-.guggbyte-banner__brand {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.03em;
-}
-.guggbyte-banner__text {
+.gb-banner__content {
     flex: 1;
-    font-size: 0.875rem;
-    color: rgba(255,255,255,0.85);
+    margin-left: 18px;
+    overflow: hidden;
 }
-.guggbyte-banner__text strong { color: #fff; }
-.guggbyte-banner__cta {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #4fc3f7;
+.gb-banner__headline {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.3px;
+    animation: gbFadeSlide 4s ease-in-out infinite;
     white-space: nowrap;
-    animation: gbArrow 1.5s ease-in-out infinite;
 }
-@keyframes gbFadeIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
+.gb-banner__sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #a5f3fc;
+    margin-top: 2px;
+    opacity: 0;
+    animation: gbFadeIn 1.8s ease 0.6s forwards;
 }
-@keyframes gbGradient {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+.gb-banner__cta {
+    background: #06b6d4;
+    color: #0f172a;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    margin-left: 16px;
+    box-shadow: 0 0 18px #22d3ee;
+    animation: gbPulseCTA 2s infinite;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.25s;
+    border: none;
 }
-@keyframes gbPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.5; transform: scale(1.4); }
+.gb-banner:hover .gb-banner__cta {
+    transform: scale(1.08);
+    background: #67e8f9;
+    box-shadow: 0 0 30px #67e8f9;
 }
-@keyframes gbArrow {
-    0%, 100% { transform: translateX(0); }
-    50%       { transform: translateX(4px); }
+.gb-banner__tag {
+    position: absolute;
+    top: 6px;
+    right: 16px;
+    background: #eab308;
+    color: #1e293b;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+}
+@keyframes gbGlow {
+    from { text-shadow: 0 0 10px #67e8f9; }
+    to   { text-shadow: 0 0 25px #22d3ee, 0 0 40px #67e8f9; }
+}
+@keyframes gbFadeSlide {
+    0%   { transform: translateX(-30px); opacity: 0; }
+    15%  { transform: translateX(0); opacity: 1; }
+    70%  { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(30px); opacity: 0; }
+}
+@keyframes gbFadeIn { to { opacity: 1; } }
+@keyframes gbPulseCTA {
+    0%, 100% { box-shadow: 0 0 18px #22d3ee; }
+    50%       { box-shadow: 0 0 40px #67e8f9; }
+}
+@keyframes gbBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
 }
 </style>
-<section class="guggbyte-banner">
-    <a href="https://www.guggbyte.com/" target="_blank" rel="noopener" class="guggbyte-banner__link">
-        <div class="guggbyte-banner__inner">
-            <div class="guggbyte-banner__logo-wrap">
-                <span class="guggbyte-banner__dot"></span>
-                <span class="guggbyte-banner__brand">guggbyte.com</span>
-            </div>
-            <div class="guggbyte-banner__text">
-                <strong>essenplaner</strong> wird bereitgestellt von <strong>guggbyte.com</strong> – digitale Lösungen für deinen Alltag.
-            </div>
-            <div class="guggbyte-banner__cta">Mehr entdecken →</div>
-        </div>
-    </a>
-</section>
+<a class="gb-banner" href="https://www.guggbyte.com/" target="_blank" rel="noopener">
+    <div class="gb-banner__logo">guggbyte<span class="gb-banner__dot"></span></div>
+    <div class="gb-banner__content">
+        <div class="gb-banner__headline">Künstliche Intelligenz. Implementiert.</div>
+        <div class="gb-banner__sub">Praxisnah · Open Source · On-Premise · DSGVO-sicher</div>
+    </div>
+    <div class="gb-banner__cta">Jetzt KI starten →</div>
+    <div class="gb-banner__tag">100% Open Source</div>
+</a>
 
 <!-- Hero -->
 <section class="landing-hero">

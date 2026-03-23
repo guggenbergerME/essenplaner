@@ -11,7 +11,10 @@
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <a href="/" class="header__logo">essenplaner</a>
+            <a href="/" class="header__logo">
+                <span class="header__logo-name">essenplaner</span>
+                <span class="header__logo-by">by guggbyte.com</span>
+            </a>
             <nav class="header__nav">
                 {% block nav %}{% endblock %}
                 {% if user is defined and user %}

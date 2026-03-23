@@ -89,6 +89,22 @@ body {
     color: var(--brand-color);
     text-decoration: none;
     letter-spacing: -0.02em;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.header__logo-name {
+    display: block;
+}
+
+.header__logo-by {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: var(--text-muted, #9ca3af);
+    text-transform: lowercase;
 }
 
 .header__nav {

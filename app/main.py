@@ -167,9 +167,10 @@ async def login(request: Request):
             "fehler": "Dein Konto wurde deaktiviert.",
         })
 
-    confirm_user(user["id"])
     token = create_session_token(user["id"])
-    response = RedirectResponse("/", status_code=303)
+    # Erster Login → Passwort-Pflicht
+    ziel = "/passwort-setzen" if not user.get("confirmed") else "/"
+    response = RedirectResponse(ziel, status_code=303)
     response.set_cookie(
         SESSION_COOKIE, token,
         max_age=60 * 60 * 24 * 30,
@@ -465,6 +466,68 @@ async def einstellungen_speichern(request: Request):
     })
 
 
+# ── Passwort-Validierung ─────────────────────────
+
+import re as _re
+
+def _validate_password(pw: str) -> str | None:
+    """Gibt None zurück wenn ok, sonst Fehlermeldung."""
+    if len(pw) < 8:
+        return "Das Passwort muss mindestens 8 Zeichen lang sein."
+    if not _re.search(r"[A-Z]", pw):
+        return "Das Passwort muss mindestens einen Großbuchstaben enthalten."
+    if not _re.search(r"[a-z]", pw):
+        return "Das Passwort muss mindestens einen Kleinbuchstaben enthalten."
+    if not _re.search(r"\d", pw):
+        return "Das Passwort muss mindestens eine Zahl enthalten."
+    if not _re.search(r"[^A-Za-z0-9]", pw):
+        return "Das Passwort muss mindestens ein Sonderzeichen enthalten."
+    return None
+
+
+# ── Passwort setzen (Erster Login) ───────────────
+
+@app.get("/passwort-setzen", response_class=HTMLResponse)
+async def passwort_setzen_seite(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    if user.get("confirmed"):
+        return RedirectResponse("/", status_code=303)
+    return templates.TemplateResponse("passwort_setzen.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+    })
+
+
+@app.post("/passwort-setzen", response_class=HTMLResponse)
+async def passwort_setzen(request: Request):
+    user = _require_login(request)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    if user.get("confirmed"):
+        return RedirectResponse("/", status_code=303)
+
+    form = await request.form()
+    neues_pw = form.get("neues_passwort", "")
+    neues_pw2 = form.get("neues_passwort2", "")
+
+    fehler = _validate_password(neues_pw)
+    if not fehler and neues_pw != neues_pw2:
+        fehler = "Die Passwörter stimmen nicht überein."
+
+    if fehler:
+        return templates.TemplateResponse("passwort_setzen.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": fehler,
+        })
+
+    update_user_password(user["id"], hash_password(neues_pw))
+    confirm_user(user["id"])
+    return RedirectResponse("/", status_code=303)
+
+
 # ── Passwort aendern ─────────────────────────────
 
 @app.get("/passwort-aendern", response_class=HTMLResponse)
@@ -503,12 +566,11 @@ async def passwort_aendern(request: Request):
         ctx["fehler"] = "Das aktuelle Passwort ist falsch."
         return templates.TemplateResponse("passwort_aendern.html", ctx)
 
-    if len(neues_pw) < 8:
-        ctx["fehler"] = "Das neue Passwort muss mindestens 8 Zeichen lang sein."
-        return templates.TemplateResponse("passwort_aendern.html", ctx)
-
-    if neues_pw != neues_pw2:
-        ctx["fehler"] = "Die neuen Passwörter stimmen nicht überein."
+    fehler = _validate_password(neues_pw)
+    if not fehler and neues_pw != neues_pw2:
+        fehler = "Die neuen Passwörter stimmen nicht überein."
+    if fehler:
+        ctx["fehler"] = fehler
         return templates.TemplateResponse("passwort_aendern.html", ctx)
 
     update_user_password(user["id"], hash_password(neues_pw))

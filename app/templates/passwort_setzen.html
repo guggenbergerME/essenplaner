@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Passwort festlegen – essenplaner{% endblock %}
+
+{% block content %}
+<section class="auth">
+    <div class="auth__card">
+        <h1 class="auth__title">Willkommen!</h1>
+        <p class="auth__subtitle">
+            Du hast dich zum ersten Mal angemeldet. Bitte lege jetzt dein persönliches Passwort fest.
+        </p>
+
+        {% if fehler %}
+        <div class="auth__alert auth__alert--error">{{ fehler }}</div>
+        {% endif %}
+
+        <form method="POST" action="/passwort-setzen" class="auth__form" id="pwForm">
+            <div class="auth__field">
+                <label for="neues_passwort">Neues Passwort</label>
+                <input type="password" id="neues_passwort" name="neues_passwort"
+                       required autofocus placeholder="Dein neues Passwort"
+                       oninput="pruefePw(this.value)">
+                <ul id="pwHinweise" style="margin: 0.5rem 0 0 1rem; font-size: 0.82rem; line-height: 1.7;">
+                    <li id="h-len"  style="color: var(--text-muted);">Mindestens 8 Zeichen</li>
+                    <li id="h-gross" style="color: var(--text-muted);">Mindestens 1 Großbuchstabe</li>
+                    <li id="h-klein" style="color: var(--text-muted);">Mindestens 1 Kleinbuchstabe</li>
+                    <li id="h-zahl" style="color: var(--text-muted);">Mindestens 1 Zahl</li>
+                    <li id="h-sonder" style="color: var(--text-muted);">Mindestens 1 Sonderzeichen</li>
+                </ul>
+            </div>
+            <div class="auth__field">
+                <label for="neues_passwort2">Passwort wiederholen</label>
+                <input type="password" id="neues_passwort2" name="neues_passwort2"
+                       required placeholder="Passwort wiederholen">
+            </div>
+            <button type="submit" class="btn btn--primary btn--full">Passwort festlegen</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function pruefePw(pw) {
+    const set = (id, ok) => {
+        const el = document.getElementById(id);
+        el.style.color = ok ? 'var(--success, #16a34a)' : 'var(--text-muted)';
+        el.style.fontWeight = ok ? '600' : 'normal';
+    };
+    set('h-len',   pw.length >= 8);
+    set('h-gross', /[A-Z]/.test(pw));
+    set('h-klein', /[a-z]/.test(pw));
+    set('h-zahl',  /\d/.test(pw));
+    set('h-sonder',/[^A-Za-z0-9]/.test(pw));
+}
+</script>
+{% endblock %}

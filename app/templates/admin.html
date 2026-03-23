@@ -54,7 +54,7 @@
                     </td>
                     <td>
                         {% if u.email != user.email %}
-                        <form method="POST" action="/admin/user/{{ u.id }}/löschen" onsubmit="return confirm('Nutzer {{ u.email }} wirklich löschen?');">
+                        <form method="POST" action="/admin/user/{{ u.id }}/loeschen" onsubmit="return confirm('Nutzer {{ u.email }} wirklich löschen?');">
                             <button type="submit" class="btn btn--danger btn--small">Löschen</button>
                         </form>
                         {% endif %}

@@ -87,6 +87,152 @@
     </div>
 </section>
 
+<!-- guggbyte.com Banner -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+.gb-banner {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(100deg, #0A0C14 0%, #0F1220 40%, #161929 60%, #0A0C14 100%);
+    border: 2px solid #FFE600;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 28px rgba(255,230,0,0.25);
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+}
+.gb-banner:hover { box-shadow: 0 0 48px rgba(255,230,0,0.45); }
+.gb-banner__logo-img {
+    height: 90px;
+    width: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(255,230,0,0.4));
+}
+.gb-banner__divider {
+    width: 2px;
+    height: 80px;
+    background: #2A2F48;
+    margin: 0 24px;
+    flex-shrink: 0;
+}
+.gb-banner__content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+.gb-banner__label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #4A5070;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+.gb-banner__slider {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #FFE600;
+    height: 34px;
+    overflow: hidden;
+    position: relative;
+}
+.gb-banner__slider-track {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gb-banner__slider-item {
+    height: 34px;
+    line-height: 34px;
+    white-space: nowrap;
+}
+.gb-banner__sub {
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    color: #8B90A8;
+}
+.gb-banner__cta {
+    background: #FFE600;
+    color: #0A0C14;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    padding: 10px 26px;
+    border-radius: 6px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    margin-left: 24px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.25s;
+    border: none;
+    text-transform: uppercase;
+}
+.gb-banner:hover .gb-banner__cta {
+    background: #fff;
+    box-shadow: 0 0 20px rgba(255,230,0,0.5);
+    transform: translateY(-1px);
+}
+.gb-banner__tag {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: #FFE600;
+    color: #0A0C14;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: 'Barlow', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+</style>
+<a class="gb-banner" href="https://www.guggbyte.com/" target="_blank" rel="noopener">
+    <img class="gb-banner__logo-img" src="{{ url_for('static', path='guggbyte_logo.png') }}" alt="guggbyte.com Logo">
+    <div class="gb-banner__divider"></div>
+    <div class="gb-banner__content">
+        <div class="gb-banner__label">Unsere Leistungen</div>
+        <div class="gb-banner__slider">
+            <div class="gb-banner__slider-track" id="gbSliderTrack2">
+                <div class="gb-banner__slider-item">Individualentwicklung</div>
+                <div class="gb-banner__slider-item">KI-Beratung &amp; Strategie</div>
+                <div class="gb-banner__slider-item">KI-Implementierung</div>
+                <div class="gb-banner__slider-item">Automatisierung</div>
+                <div class="gb-banner__slider-item">KI-Infrastruktur</div>
+                <div class="gb-banner__slider-item">Linux Systeme</div>
+                <div class="gb-banner__slider-item">Maschinen-Automatisierung</div>
+            </div>
+        </div>
+        <div class="gb-banner__sub">Praxisnah · Open Source · On-Premise · DSGVO-sicher</div>
+    </div>
+    <div class="gb-banner__cta">Jetzt starten →</div>
+    <div class="gb-banner__tag">100% Open Source</div>
+</a>
+<script>
+(function() {
+    const track = document.getElementById('gbSliderTrack2');
+    if (!track) return;
+    const items = track.children.length;
+    let current = 0;
+    setInterval(function() {
+        current = (current + 1) % items;
+        track.style.transform = 'translateY(-' + (current * 34) + 'px)';
+    }, 2800);
+})();
+</script>
+
 <!-- Einkaufsliste -->
 <section class="shopping">
     <div class="shopping__header">

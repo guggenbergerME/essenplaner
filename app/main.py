@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, Response, RedirectResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.planner import generiere_wochenplan, lade_alle_rezepte, parse_nichtverwenden, filter_rezepte, skaliere_rezept
 from app.pdf_generator import einkaufsliste_pdf, rezept_pdf, wochenplan_pdf
@@ -23,12 +24,34 @@ from app.auth import (
 )
 from app.email_service import send_password_email
 
+# ── Security-Header-Middleware ────────────────────────
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data:; "
+            "font-src 'self'; "
+            "object-src 'none'; "
+            "frame-ancestors 'none';"
+        )
+        return response
+
+
 # ── App ──────────────────────────────────────────────
 app = FastAPI(
     title="essenplaner",
     description="Wochenplaner für Mahlzeiten mit Einkaufsliste",
     version="2.0.0",
 )
+app.add_middleware(SecurityHeadersMiddleware)
 
 # ── Static & Templates ───────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,24 +61,29 @@ templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 # ── DEV_MODE (Bug-Melde-Modus) ───────────────────────
 DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
 
-# ── Rate-Limiting für Registrierung ──────────────────
-# {ip: [timestamp, ...]}
-_reg_attempts: dict[str, list[float]] = {}
-_REG_MAX = 5       # max. Versuche
-_REG_WINDOW = 3600 # Zeitfenster in Sekunden (1h)
+# ── Rate-Limiting (allgemein) ─────────────────────────
+# {key: [timestamp, ...]}
+_rate_store: dict[str, list[float]] = {}
 
 
-def _check_rate_limit(ip: str) -> bool:
-    """True = erlaubt, False = gesperrt."""
+def _check_rate_limit(key: str, max_attempts: int, window: int) -> bool:
+    """True = erlaubt, False = gesperrt. key = z.B. 'login:1.2.3.4'"""
     now = time.time()
-    attempts = _reg_attempts.get(ip, [])
-    attempts = [t for t in attempts if now - t < _REG_WINDOW]
-    if len(attempts) >= _REG_MAX:
-        _reg_attempts[ip] = attempts
+    attempts = _rate_store.get(key, [])
+    attempts = [t for t in attempts if now - t < window]
+    if len(attempts) >= max_attempts:
+        _rate_store[key] = attempts
         return False
     attempts.append(now)
-    _reg_attempts[ip] = attempts
+    _rate_store[key] = attempts
     return True
+
+
+def _client_ip(request: Request) -> str:
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 
 # ── Datenbank initialisieren ─────────────────────────
 init_db()
@@ -109,6 +137,14 @@ async def login_seite(request: Request):
 
 @app.post("/login", response_class=HTMLResponse)
 async def login(request: Request):
+    # Rate-Limiting: max. 10 Login-Versuche pro IP / 15 Minuten
+    if not _check_rate_limit(f"login:{_client_ip(request)}", 10, 900):
+        return templates.TemplateResponse("login.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "Zu viele Anmeldeversuche. Bitte warte 15 Minuten.",
+        })
+
     form = await request.form()
     email = form.get("email", "").strip().lower()
     password = form.get("password", "")
@@ -163,9 +199,8 @@ async def registrieren(request: Request):
             "email": form.get("email", ""),
         })
 
-    # ── Rate-Limiting pro IP ──────────────────────────
-    client_ip = request.client.host if request.client else "unknown"
-    if not _check_rate_limit(client_ip):
+    # ── Rate-Limiting pro IP: max. 5 Registrierungen/IP/Stunde ──
+    if not _check_rate_limit(f"reg:{_client_ip(request)}", 5, 3600):
         return templates.TemplateResponse("registrieren.html", {
             "request": request,
             "dev_mode": DEV_MODE,

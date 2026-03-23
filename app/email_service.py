@@ -16,7 +16,7 @@ SMTP_TLS = os.getenv("SMTP_TLS", "true").lower() == "true"
 def send_password_email(to_email: str, password: str) -> bool:
     """Sendet das Einmal-Passwort per E-Mail."""
     if not all([SMTP_HOST, SMTP_USER, SMTP_PASSWORD, SMTP_FROM]):
-        print(f"[MAIL] SMTP nicht konfiguriert. Passwort für {to_email}: {password}")
+        print(f"[MAIL] SMTP nicht konfiguriert – E-Mail an {to_email} nicht gesendet.")
         return False
 
     msg = MIMEMultipart("alternative")
@@ -70,5 +70,4 @@ essenplaner
         return True
     except Exception as e:
         print(f"[MAIL] Fehler beim Senden an {to_email}: {e}")
-        print(f"[MAIL] Passwort für {to_email}: {password}")
         return False

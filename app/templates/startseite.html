@@ -11,129 +11,153 @@
 
 <!-- guggbyte.com Banner -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 .gb-banner {
     width: 100%;
     height: 160px;
-    background: linear-gradient(95deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-    border: 2px solid #22d3ee;
+    background: linear-gradient(100deg, #0A0C14 0%, #0F1220 40%, #161929 60%, #0A0C14 100%);
+    border: 2px solid #FFE600;
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 0 30px rgba(34,211,238,0.5);
+    box-shadow: 0 0 28px rgba(255,230,0,0.25);
     display: flex;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 28px;
     box-sizing: border-box;
     margin-bottom: 1.5rem;
     cursor: pointer;
     text-decoration: none;
+    transition: box-shadow 0.3s;
 }
-.gb-banner__logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: #67e8f9;
-    letter-spacing: -1px;
-    animation: gbGlow 2.5s ease-in-out infinite alternate;
-    white-space: nowrap;
+.gb-banner:hover {
+    box-shadow: 0 0 48px rgba(255,230,0,0.45);
+}
+.gb-banner__logo-img {
+    height: 90px;
+    width: auto;
     flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(255,230,0,0.4));
 }
-.gb-banner__dot {
-    display: inline-block;
-    width: 9px;
-    height: 9px;
-    background: #67e8f9;
-    border-radius: 50%;
-    margin-left: 4px;
-    vertical-align: middle;
-    animation: gbBlink 1.4s infinite;
+.gb-banner__divider {
+    width: 2px;
+    height: 80px;
+    background: #2A2F48;
+    margin: 0 24px;
+    flex-shrink: 0;
 }
 .gb-banner__content {
     flex: 1;
-    margin-left: 18px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
 }
-.gb-banner__headline {
-    font-family: 'Inter', sans-serif;
-    font-size: 18px;
+.gb-banner__label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #4A5070;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+.gb-banner__slider {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
     font-weight: 700;
-    color: white;
+    color: #FFE600;
     letter-spacing: 0.3px;
-    animation: gbFadeSlide 4s ease-in-out infinite;
+    height: 34px;
+    overflow: hidden;
+    position: relative;
+}
+.gb-banner__slider-track {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gb-banner__slider-item {
+    height: 34px;
+    line-height: 34px;
     white-space: nowrap;
 }
 .gb-banner__sub {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Barlow', sans-serif;
     font-size: 12px;
-    color: #a5f3fc;
-    margin-top: 2px;
-    opacity: 0;
-    animation: gbFadeIn 1.8s ease 0.6s forwards;
+    color: #8B90A8;
+    letter-spacing: 0.2px;
 }
 .gb-banner__cta {
-    background: #06b6d4;
-    color: #0f172a;
-    font-family: 'Inter', sans-serif;
+    background: #FFE600;
+    color: #0A0C14;
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 14px;
-    margin-left: 16px;
-    box-shadow: 0 0 18px #22d3ee;
-    animation: gbPulseCTA 2s infinite;
+    padding: 10px 26px;
+    border-radius: 6px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    margin-left: 24px;
     white-space: nowrap;
     flex-shrink: 0;
     transition: all 0.25s;
     border: none;
+    text-transform: uppercase;
 }
 .gb-banner:hover .gb-banner__cta {
-    transform: scale(1.08);
-    background: #67e8f9;
-    box-shadow: 0 0 30px #67e8f9;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(255,230,0,0.5);
+    transform: translateY(-1px);
 }
 .gb-banner__tag {
     position: absolute;
-    top: 6px;
-    right: 16px;
-    background: #eab308;
-    color: #1e293b;
+    top: 8px;
+    right: 12px;
+    background: #FFE600;
+    color: #0A0C14;
     font-size: 9px;
     font-weight: 700;
     padding: 2px 8px;
-    border-radius: 4px;
-    font-family: 'Inter', sans-serif;
-}
-@keyframes gbGlow {
-    from { text-shadow: 0 0 10px #67e8f9; }
-    to   { text-shadow: 0 0 25px #22d3ee, 0 0 40px #67e8f9; }
-}
-@keyframes gbFadeSlide {
-    0%   { transform: translateX(-30px); opacity: 0; }
-    15%  { transform: translateX(0); opacity: 1; }
-    70%  { transform: translateX(0); opacity: 1; }
-    100% { transform: translateX(30px); opacity: 0; }
-}
-@keyframes gbFadeIn { to { opacity: 1; } }
-@keyframes gbPulseCTA {
-    0%, 100% { box-shadow: 0 0 18px #22d3ee; }
-    50%       { box-shadow: 0 0 40px #67e8f9; }
-}
-@keyframes gbBlink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.3; }
+    border-radius: 3px;
+    font-family: 'Barlow', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 </style>
 <a class="gb-banner" href="https://www.guggbyte.com/" target="_blank" rel="noopener">
-    <div class="gb-banner__logo">guggbyte<span class="gb-banner__dot"></span></div>
+    <img class="gb-banner__logo-img" src="{{ url_for('static', path='guggbyte_logo.png') }}" alt="guggbyte.com Logo">
+    <div class="gb-banner__divider"></div>
     <div class="gb-banner__content">
-        <div class="gb-banner__headline">Künstliche Intelligenz. Implementiert.</div>
+        <div class="gb-banner__label">Unsere Leistungen</div>
+        <div class="gb-banner__slider">
+            <div class="gb-banner__slider-track" id="gbSliderTrack">
+                <div class="gb-banner__slider-item">Individualentwicklung</div>
+                <div class="gb-banner__slider-item">KI-Beratung &amp; Strategie</div>
+                <div class="gb-banner__slider-item">KI-Implementierung</div>
+                <div class="gb-banner__slider-item">Automatisierung</div>
+                <div class="gb-banner__slider-item">KI-Infrastruktur</div>
+                <div class="gb-banner__slider-item">Linux Systeme</div>
+                <div class="gb-banner__slider-item">Maschinen-Automatisierung</div>
+            </div>
+        </div>
         <div class="gb-banner__sub">Praxisnah · Open Source · On-Premise · DSGVO-sicher</div>
     </div>
-    <div class="gb-banner__cta">Jetzt KI starten →</div>
+    <div class="gb-banner__cta">Jetzt starten →</div>
     <div class="gb-banner__tag">100% Open Source</div>
 </a>
+<script>
+(function() {
+    const track = document.getElementById('gbSliderTrack');
+    if (!track) return;
+    const items = track.children.length;
+    let current = 0;
+    setInterval(function() {
+        current = (current + 1) % items;
+        track.style.transform = 'translateY(-' + (current * 34) + 'px)';
+    }, 2800);
+})();
+</script>
 
 <!-- Hero -->
 <section class="landing-hero">

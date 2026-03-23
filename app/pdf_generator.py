@@ -3,13 +3,32 @@
 import io
 from fpdf import FPDF
 
+# Zeichen die Helvetica nicht unterstützt → ASCII-Ersatz
+_UNICODE_MAP = str.maketrans({
+    "\u2013": "-",   # en dash
+    "\u2014": "-",   # em dash
+    "\u201c": '"',   # " left
+    "\u201d": '"',   # " right
+    "\u201e": '"',   # „ German low
+    "\u2018": "'",   # ' left
+    "\u2019": "'",   # ' right
+    "\u2026": "...", # …
+    "\u00b0": " Grad",
+    "\u00b7": "-",
+    "\u2022": "-",
+})
+
+def _norm(text: str) -> str:
+    """Normalisiert Text für Helvetica-PDF."""
+    return str(text).translate(_UNICODE_MAP)
+
 
 class SWPdf(FPDF):
     """Schwarz-Weiss PDF mit einheitlichem Styling."""
 
     def header(self):
         self.set_font("Helvetica", "B", 14)
-        self.cell(0, 10, self.title, align="C", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 10, _norm(self.title), align="C", new_x="LMARGIN", new_y="NEXT")
         self.line(10, self.get_y(), 200, self.get_y())
         self.ln(4)
 
@@ -17,6 +36,12 @@ class SWPdf(FPDF):
         self.set_y(-15)
         self.set_font("Helvetica", "I", 8)
         self.cell(0, 10, f"essenplaner | Seite {self.page_no()}", align="C")
+
+    def cell(self, w=0, h=0, txt="", **kwargs):
+        return super().cell(w, h, _norm(txt), **kwargs)
+
+    def multi_cell(self, w, h=0, txt="", **kwargs):
+        return super().multi_cell(w, h, _norm(txt), **kwargs)
 
 
 def einkaufsliste_pdf(einkaufsliste_gruppiert, laeden):

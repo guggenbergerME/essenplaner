@@ -5,9 +5,33 @@
                 &copy; {{ now().year if now is defined else "2026" }} <strong>essenplaner</strong> | Tobias Guggenberger
             </p>
             <div class="footer__links">
-                <a href="mailto:admin@guggbyte.com" class="footer__link">Kontakt</a>
-                <a href="http://192.168.2.130" class="footer__link" target="_blank">Webseite</a>
+                <a href="mailto:info@guggbyte.com" class="footer__link">Kontakt</a>
+                <a href="/impressum" class="footer__link">Impressum</a>
+                <a href="/datenschutz" class="footer__link">Datenschutz</a>
             </div>
         </div>
     </div>
 </footer>
+
+<!-- Cookie-Banner -->
+<div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:var(--card-bg, #fff); border-top: 1px solid var(--border, #e5e7eb); padding: 1rem 1.5rem; z-index: 9999; box-shadow: 0 -2px 12px rgba(0,0,0,0.08);">
+    <div style="max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <p style="flex: 1; margin: 0; font-size: 0.875rem; color: var(--text-muted);">
+            Diese Anwendung verwendet ausschließlich technisch notwendige Cookies für den Login-Betrieb.
+            Keine Tracking- oder Werbe-Cookies. <a href="/datenschutz" style="color: var(--primary, #0A2463);">Datenschutzerklärung</a>
+        </p>
+        <button onclick="cookieAkzeptieren()" class="btn btn--primary btn--small">Verstanden</button>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (!localStorage.getItem('cookie_accepted')) {
+        document.getElementById('cookieBanner').style.display = 'block';
+    }
+})();
+function cookieAkzeptieren() {
+    localStorage.setItem('cookie_accepted', '1');
+    document.getElementById('cookieBanner').style.display = 'none';
+}
+</script>

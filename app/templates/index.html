@@ -93,9 +93,6 @@
         <h2 class="shopping__title">Einkaufsliste</h2>
         <a href="/api/einkaufsliste.pdf" class="btn btn--primary btn--small">PDF herunterladen</a>
     </div>
-    {% if laeden %}
-    <p class="shopping__stores">Geschäfte: {% for laden in laeden %}<span class="shopping__store-tag">{{ laden }}</span>{% endfor %}</p>
-    {% endif %}
     <div class="shopping__grouped">
         {% for abteilung, zutaten in einkaufsliste_gruppiert %}
         <div class="shopping__section">

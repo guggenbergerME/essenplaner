@@ -757,6 +757,30 @@ async def admin_user_loeschen(request: Request, user_id: int):
     return RedirectResponse("/admin", status_code=303)
 
 
+# ── Rechtliche Seiten ─────────────────────────────
+
+@app.get("/impressum", response_class=HTMLResponse)
+async def impressum(request: Request):
+    user = _get_current_user(request)
+    return templates.TemplateResponse("impressum.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+    })
+
+
+@app.get("/datenschutz", response_class=HTMLResponse)
+async def datenschutz(request: Request):
+    user = _get_current_user(request)
+    return templates.TemplateResponse("datenschutz.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+    })
+
+
 # ── Health ────────────────────────────────────────
 
 @app.get("/health")

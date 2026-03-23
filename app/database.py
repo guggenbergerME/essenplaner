@@ -43,8 +43,10 @@ def init_db():
     # Migration: confirmed-Spalte für bestehende Datenbanken
     try:
         conn.execute("ALTER TABLE users ADD COLUMN confirmed INTEGER DEFAULT 0")
+        # Bestehende User gelten als bestätigt (haben sich bereits angemeldet)
+        conn.execute("UPDATE users SET confirmed = 1")
         conn.commit()
-        print("[DB] Migration: Spalte 'confirmed' hinzugefügt.")
+        print("[DB] Migration: Spalte 'confirmed' hinzugefügt, bestehende User als bestätigt markiert.")
     except Exception:
         pass  # Spalte existiert bereits
     conn.commit()

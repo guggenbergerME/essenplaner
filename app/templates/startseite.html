@@ -9,6 +9,103 @@
 
 {% block content %}
 
+<!-- guggbyte.com Banner -->
+<style>
+.guggbyte-banner {
+    margin: 0 0 1.5rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: gbFadeIn 0.8s ease both;
+}
+.guggbyte-banner__link {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    text-decoration: none;
+    background: linear-gradient(135deg, #0A2463 0%, #1a3a7c 50%, #0A2463 100%);
+    background-size: 200% 200%;
+    animation: gbGradient 4s ease infinite;
+    padding: 0 1.75rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.guggbyte-banner__link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10,36,99,0.35);
+}
+.guggbyte-banner__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+}
+.guggbyte-banner__logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+.guggbyte-banner__dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4fc3f7;
+    animation: gbPulse 2s ease-in-out infinite;
+}
+.guggbyte-banner__brand {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.03em;
+}
+.guggbyte-banner__text {
+    flex: 1;
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.85);
+}
+.guggbyte-banner__text strong { color: #fff; }
+.guggbyte-banner__cta {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4fc3f7;
+    white-space: nowrap;
+    animation: gbArrow 1.5s ease-in-out infinite;
+}
+@keyframes gbFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes gbGradient {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes gbPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(1.4); }
+}
+@keyframes gbArrow {
+    0%, 100% { transform: translateX(0); }
+    50%       { transform: translateX(4px); }
+}
+</style>
+<section class="guggbyte-banner">
+    <a href="https://www.guggbyte.com/" target="_blank" rel="noopener" class="guggbyte-banner__link">
+        <div class="guggbyte-banner__inner">
+            <div class="guggbyte-banner__logo-wrap">
+                <span class="guggbyte-banner__dot"></span>
+                <span class="guggbyte-banner__brand">guggbyte.com</span>
+            </div>
+            <div class="guggbyte-banner__text">
+                <strong>essenplaner</strong> wird bereitgestellt von <strong>guggbyte.com</strong> – digitale Lösungen für deinen Alltag.
+            </div>
+            <div class="guggbyte-banner__cta">Mehr entdecken →</div>
+        </div>
+    </a>
+</section>
+
 <!-- Hero -->
 <section class="landing-hero">
     <h1 class="landing-hero__title">Nie mehr überlegen, was es zu essen gibt.</h1>
@@ -109,104 +206,6 @@
         </div>
     </div>
 </section>
-
-<!-- guggbyte.com Banner -->
-<section class="guggbyte-banner">
-    <a href="https://www.guggbyte.com/" target="_blank" rel="noopener" class="guggbyte-banner__link">
-        <div class="guggbyte-banner__inner">
-            <div class="guggbyte-banner__logo-wrap">
-                <span class="guggbyte-banner__dot"></span>
-                <span class="guggbyte-banner__brand">guggbyte.com</span>
-            </div>
-            <div class="guggbyte-banner__text">
-                <strong>essenplaner</strong> wird bereitgestellt von <strong>guggbyte.com</strong> – digitale Lösungen für deinen Alltag.
-            </div>
-            <div class="guggbyte-banner__cta">Mehr entdecken →</div>
-        </div>
-    </a>
-</section>
-<style>
-.guggbyte-banner {
-    margin: 2rem 0;
-    border-radius: 12px;
-    overflow: hidden;
-    animation: gbFadeIn 0.8s ease both;
-}
-.guggbyte-banner__link {
-    display: block;
-    text-decoration: none;
-    background: linear-gradient(135deg, #0A2463 0%, #1a3a7c 50%, #0A2463 100%);
-    background-size: 200% 200%;
-    animation: gbGradient 4s ease infinite;
-    padding: 1.25rem 1.75rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.guggbyte-banner__link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(10,36,99,0.35);
-}
-.guggbyte-banner__inner {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    flex-wrap: wrap;
-}
-.guggbyte-banner__logo-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0;
-}
-.guggbyte-banner__dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #4fc3f7;
-    animation: gbPulse 2s ease-in-out infinite;
-}
-.guggbyte-banner__brand {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.03em;
-}
-.guggbyte-banner__text {
-    flex: 1;
-    font-size: 0.875rem;
-    color: rgba(255,255,255,0.85);
-    min-width: 200px;
-}
-.guggbyte-banner__text strong {
-    color: #fff;
-}
-.guggbyte-banner__cta {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #4fc3f7;
-    white-space: nowrap;
-    animation: gbArrow 1.5s ease-in-out infinite;
-}
-@keyframes gbFadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes gbGradient {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-@keyframes gbPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.5; transform: scale(1.4); }
-}
-@keyframes gbArrow {
-    0%, 100% { transform: translateX(0); }
-    50%       { transform: translateX(4px); }
-}
-</style>
 
 <!-- Registrierung -->
 <section id="registrieren" class="landing-section">

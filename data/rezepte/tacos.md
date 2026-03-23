@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 580 kcal |
+| Eiweiss | 32 g |
+| Fett | 26 g |
+| Kohlenhydrate | 52 g |
+| Ballaststoffe | 8 g |
+
 ## Zutaten
 
 - 12 Taco-Schalen

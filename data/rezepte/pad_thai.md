@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 510 kcal |
+| Eiweiss | 30 g |
+| Fett | 14 g |
+| Kohlenhydrate | 64 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 300g Reisnudeln

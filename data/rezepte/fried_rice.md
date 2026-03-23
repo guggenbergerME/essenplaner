@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 480 kcal |
+| Eiweiss | 28 g |
+| Fett | 12 g |
+| Kohlenhydrate | 62 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 400g Reis (vom Vortag)

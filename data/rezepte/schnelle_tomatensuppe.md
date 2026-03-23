@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 280 kcal |
+| Eiweiss | 5 g |
+| Fett | 17 g |
+| Kohlenhydrate | 25 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 2 Dosen gehackte Tomaten (800g)

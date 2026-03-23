@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 520 kcal |
+| Eiweiss | 18 g |
+| Fett | 22 g |
+| Kohlenhydrate | 62 g |
+| Ballaststoffe | 10 g |
+
 ## Zutaten
 
 - 250g rote Linsen

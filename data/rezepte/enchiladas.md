@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Sa, So, Di
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 650 kcal |
+| Eiweiss | 35 g |
+| Fett | 28 g |
+| Kohlenhydrate | 58 g |
+| Ballaststoffe | 7 g |
+
 ## Zutaten
 
 - 8 Tortilla-Wraps

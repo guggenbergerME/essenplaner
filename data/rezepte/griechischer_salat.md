@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 480 kcal |
+| Eiweiss | 14 g |
+| Fett | 24 g |
+| Kohlenhydrate | 48 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 1 Gurke

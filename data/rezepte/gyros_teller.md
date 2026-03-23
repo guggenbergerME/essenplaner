@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 580 kcal |
+| Eiweiss | 38 g |
+| Fett | 22 g |
+| Kohlenhydrate | 55 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 600g Schweinenacken

@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 480 kcal |
+| Eiweiss | 14 g |
+| Fett | 14 g |
+| Kohlenhydrate | 72 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 300g Risotto-Reis (Arborio)

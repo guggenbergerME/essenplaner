@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 580 kcal |
+| Eiweiss | 38 g |
+| Fett | 18 g |
+| Kohlenhydrate | 66 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 400g Ramen-Nudeln

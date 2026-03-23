@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 520 kcal |
+| Eiweiss | 18 g |
+| Fett | 28 g |
+| Kohlenhydrate | 45 g |
+| Ballaststoffe | 2 g |
+
 ## Zutaten
 
 - 4 Flammkuchen-Boeden (Kuehlregal)

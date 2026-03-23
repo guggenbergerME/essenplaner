@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 520 kcal |
+| Eiweiss | 38 g |
+| Fett | 9 g |
+| Kohlenhydrate | 72 g |
+| Ballaststoffe | 5 g |
+
 ## Zutaten
 
 - 300g Reis

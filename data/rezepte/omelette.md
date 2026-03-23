@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 320 kcal |
+| Eiweiss | 22 g |
+| Fett | 21 g |
+| Kohlenhydrate | 10 g |
+| Ballaststoffe | 2 g |
+
 ## Zutaten
 
 - 8 Eier

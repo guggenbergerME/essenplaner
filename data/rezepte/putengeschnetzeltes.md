@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 650 kcal |
+| Eiweiss | 42 g |
+| Fett | 22 g |
+| Kohlenhydrate | 65 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 500g Putenbrust

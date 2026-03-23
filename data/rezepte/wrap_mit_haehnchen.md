@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 420 kcal |
+| Eiweiss | 28 g |
+| Fett | 14 g |
+| Kohlenhydrate | 42 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 4 Tortilla-Wraps

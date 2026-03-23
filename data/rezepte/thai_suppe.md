@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 620 kcal |
+| Eiweiss | 34 g |
+| Fett | 28 g |
+| Kohlenhydrate | 58 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 400g Haehnchenbrust

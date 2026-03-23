@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Sa, So
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 670 kcal |
+| Eiweiss | 28 g |
+| Fett | 24 g |
+| Kohlenhydrate | 85 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 500g Mehl

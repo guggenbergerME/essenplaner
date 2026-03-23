@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 520 kcal |
+| Eiweiss | 28 g |
+| Fett | 14 g |
+| Kohlenhydrate | 65 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 400g Reis

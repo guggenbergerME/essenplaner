@@ -21,9 +21,6 @@
     <div class="rezept-detail__meta">
         <span class="rezept-detail__tag">{{ rezept.zubereitungszeit }} Min.</span>
         <span class="rezept-detail__tag">{{ rezept.portionen }} Personen</span>
-        {% for tag in rezept.tags %}
-        <span class="rezept-detail__tag rezept-detail__tag--day">{{ tag }}</span>
-        {% endfor %}
     </div>
 
     <div class="rezept-detail__columns">

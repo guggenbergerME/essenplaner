@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Sa, So
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 430 kcal |
+| Eiweiss | 14 g |
+| Fett | 24 g |
+| Kohlenhydrate | 40 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 1kg Kartoffeln

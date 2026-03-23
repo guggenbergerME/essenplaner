@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 480 kcal |
+| Eiweiss | 9 g |
+| Fett | 18 g |
+| Kohlenhydrate | 70 g |
+| Ballaststoffe | 5 g |
+
 ## Zutaten
 
 - 1kg Kartoffeln

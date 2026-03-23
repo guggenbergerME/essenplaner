@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 480 kcal |
+| Eiweiss | 14 g |
+| Fett | 20 g |
+| Kohlenhydrate | 58 g |
+| Ballaststoffe | 5 g |
+
 ## Zutaten
 
 - 300g Couscous

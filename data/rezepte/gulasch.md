@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Sa, So
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 620 kcal |
+| Eiweiss | 42 g |
+| Fett | 18 g |
+| Kohlenhydrate | 72 g |
+| Ballaststoffe | 5 g |
+
 ## Zutaten
 
 - 600g Rindfleisch (Schulter)

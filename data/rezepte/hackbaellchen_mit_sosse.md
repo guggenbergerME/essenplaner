@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 650 kcal |
+| Eiweiss | 38 g |
+| Fett | 20 g |
+| Kohlenhydrate | 78 g |
+| Ballaststoffe | 6 g |
+
 ## Zutaten
 
 - 500g Hackfleisch gemischt

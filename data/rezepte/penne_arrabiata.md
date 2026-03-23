@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 490 kcal |
+| Eiweiss | 16 g |
+| Fett | 13 g |
+| Kohlenhydrate | 76 g |
+| Ballaststoffe | 6 g |
+
 ## Zutaten
 
 - 500g Penne

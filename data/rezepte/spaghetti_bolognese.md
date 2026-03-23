@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 650 kcal |
+| Eiweiss | 38 g |
+| Fett | 18 g |
+| Kohlenhydrate | 82 g |
+| Ballaststoffe | 6 g |
+
 ## Zutaten
 
 - 500g Spaghetti

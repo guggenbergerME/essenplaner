@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 540 kcal |
+| Eiweiss | 35 g |
+| Fett | 19 g |
+| Kohlenhydrate | 58 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 500g Haehnchenbrust

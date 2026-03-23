@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 560 kcal |
+| Eiweiss | 20 g |
+| Fett | 22 g |
+| Kohlenhydrate | 70 g |
+| Ballaststoffe | 5 g |
+
 ## Zutaten
 
 - 500g Fusilli

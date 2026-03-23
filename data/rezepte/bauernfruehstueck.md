@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 430 kcal |
+| Eiweiss | 22 g |
+| Fett | 24 g |
+| Kohlenhydrate | 32 g |
+| Ballaststoffe | 3 g |
+
 ## Zutaten
 
 - 800g Kartoffeln (festkochend, vorgekocht)

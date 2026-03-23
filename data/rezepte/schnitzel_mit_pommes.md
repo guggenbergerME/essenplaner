@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Sa, So, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 780 kcal |
+| Eiweiss | 42 g |
+| Fett | 32 g |
+| Kohlenhydrate | 82 g |
+| Ballaststoffe | 5 g |
+
 ## Zutaten
 
 - 4 Schweineschnitzel

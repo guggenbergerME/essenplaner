@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Sa, So, Di
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 580 kcal |
+| Eiweiss | 32 g |
+| Fett | 18 g |
+| Kohlenhydrate | 62 g |
+| Ballaststoffe | 8 g |
+
 ## Zutaten
 
 - 500g Hackfleisch

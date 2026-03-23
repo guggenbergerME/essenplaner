@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Sa, So
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 520 kcal |
+| Eiweiss | 32 g |
+| Fett | 28 g |
+| Kohlenhydrate | 30 g |
+| Ballaststoffe | 6 g |
+
 ## Zutaten
 
 - 2 Auberginen

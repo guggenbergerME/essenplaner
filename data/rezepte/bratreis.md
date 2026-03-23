@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 420 kcal |
+| Eiweiss | 14 g |
+| Fett | 10 g |
+| Kohlenhydrate | 65 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 400g Reis (vom Vortag oder Schnellkoch)

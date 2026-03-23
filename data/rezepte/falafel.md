@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Di, Mi
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 580 kcal |
+| Eiweiss | 22 g |
+| Fett | 20 g |
+| Kohlenhydrate | 74 g |
+| Ballaststoffe | 12 g |
+
 ## Zutaten
 
 - 2 Dosen Kichererbsen (800g)

@@ -4,6 +4,16 @@
 - portionen: 4
 - tags: Mo, Do, Fr
 
+## Naehrwerte pro Portion
+
+| Naehrwert | Menge |
+|---|---|
+| Kalorien | 550 kcal |
+| Eiweiss | 18 g |
+| Fett | 22 g |
+| Kohlenhydrate | 68 g |
+| Ballaststoffe | 4 g |
+
 ## Zutaten
 
 - 800g Gnocchi (Kuehlregal)

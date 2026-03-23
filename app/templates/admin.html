@@ -12,6 +12,15 @@
 {% block content %}
 <section class="settings">
     <h1 class="settings__title">Nutzerverwaltung</h1>
+
+    {% set unconfirmed = users | selectattr("confirmed", "equalto", 0) | list %}
+    {% if unconfirmed %}
+    <div class="auth__alert auth__alert--error" style="margin-bottom: 1.5rem;">
+        <strong>{{ unconfirmed | length }} Nutzer noch nicht bestätigt</strong> –
+        diese Nutzer haben sich noch nie angemeldet.
+    </div>
+    {% endif %}
+
     <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Registrierte Nutzer verwalten und bei Bedarf löschen.</p>
 
     <div class="settings__section">
@@ -26,7 +35,7 @@
             </thead>
             <tbody>
                 {% for u in users %}
-                <tr>
+                <tr{% if not u.confirmed %} style="background: color-mix(in srgb, var(--warning, #f59e0b) 8%, transparent);"{% endif %}>
                     <td>
                         {{ u.email }}
                         {% if u.email == user.email %}
@@ -35,10 +44,12 @@
                     </td>
                     <td>{{ u.created_at[:10] if u.created_at else "-" }}</td>
                     <td>
-                        {% if u.is_active %}
-                        <span class="admin-table__status admin-table__status--active">Aktiv</span>
-                        {% else %}
+                        {% if not u.is_active %}
                         <span class="admin-table__status admin-table__status--inactive">Inaktiv</span>
+                        {% elif not u.confirmed %}
+                        <span class="admin-table__status" style="background:#fef3c7;color:#92400e;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem;">Ausstehend</span>
+                        {% else %}
+                        <span class="admin-table__status admin-table__status--active">Aktiv</span>
                         {% endif %}
                     </td>
                     <td>

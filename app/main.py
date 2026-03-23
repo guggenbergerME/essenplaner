@@ -13,14 +13,15 @@ from app.planner import generiere_wochenplan, lade_alle_rezepte, parse_nichtverw
 from app.pdf_generator import einkaufsliste_pdf, rezept_pdf, wochenplan_pdf
 from app.settings import lade_einstellungen, speichere_einstellungen, TAGE_KURZ, TAGE_LANG
 from app.database import (
-    init_db, create_user, get_user_by_email, get_user_by_id,
-    get_all_users, delete_user, update_user_password,
+    init_db, ensure_admin_user, create_user, get_user_by_email, get_user_by_id,
+    get_all_users, delete_user, update_user_password, confirm_user,
     save_favorit, get_favoriten, get_favorit, delete_favorit,
 )
 from app.auth import (
     hash_password, verify_password, generate_password,
     create_session_token, verify_session_token,
     is_admin_email, verify_admin, SESSION_COOKIE,
+    ADMIN_EMAIL, ADMIN_PASSWORD,
 )
 from app.email_service import send_password_email
 
@@ -87,6 +88,8 @@ def _client_ip(request: Request) -> str:
 
 # ── Datenbank initialisieren ─────────────────────────
 init_db()
+if ADMIN_EMAIL and ADMIN_PASSWORD:
+    ensure_admin_user(ADMIN_EMAIL, hash_password(ADMIN_PASSWORD))
 
 # ── Aktuellen Plan im Speicher halten ────────────────
 _aktueller_plan = None
@@ -164,6 +167,7 @@ async def login(request: Request):
             "fehler": "Dein Konto wurde deaktiviert.",
         })
 
+    confirm_user(user["id"])
     token = create_session_token(user["id"])
     response = RedirectResponse("/", status_code=303)
     response.set_cookie(

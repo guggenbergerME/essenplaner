@@ -204,6 +204,14 @@ async def registrieren(request: Request):
             "email": form.get("email", ""),
         })
 
+    # ── AGB-Akzeptanz prüfen ──
+    if not form.get("agb_akzeptiert"):
+        return templates.TemplateResponse("registrieren.html", {
+            "request": request,
+            "dev_mode": DEV_MODE,
+            "fehler": "Bitte akzeptiere die AGB um fortzufahren.",
+        })
+
     # ── Rate-Limiting pro IP: max. 5 Registrierungen/IP/Stunde ──
     if not _check_rate_limit(f"reg:{_client_ip(request)}", 5, 3600):
         return templates.TemplateResponse("registrieren.html", {
@@ -774,6 +782,17 @@ async def impressum(request: Request):
 async def datenschutz(request: Request):
     user = _get_current_user(request)
     return templates.TemplateResponse("datenschutz.html", {
+        "request": request,
+        "dev_mode": DEV_MODE,
+        "user": user,
+        "is_admin": _is_admin(user),
+    })
+
+
+@app.get("/agb", response_class=HTMLResponse)
+async def agb(request: Request):
+    user = _get_current_user(request)
+    return templates.TemplateResponse("agb.html", {
         "request": request,
         "dev_mode": DEV_MODE,
         "user": user,

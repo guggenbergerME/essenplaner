@@ -29,6 +29,12 @@
                 <label for="email">E-Mail</label>
                 <input type="email" id="email" name="email" required autofocus placeholder="deine@email.de">
             </div>
+            <div class="auth__field" style="flex-direction: row; align-items: flex-start; gap: 0.6rem; margin-top: 0.25rem;">
+                <input type="checkbox" id="agb_akzeptiert" name="agb_akzeptiert" required style="margin-top: 0.2rem; flex-shrink: 0;">
+                <label for="agb_akzeptiert" style="font-size: 0.9rem; line-height: 1.5;">
+                    Ich habe die <a href="/agb" class="auth__link" target="_blank">AGB</a> gelesen und akzeptiere diese.
+                </label>
+            </div>
             <button type="submit" class="btn btn--primary btn--full">Registrieren</button>
         </form>
         {% endif %}
